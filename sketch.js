@@ -6,7 +6,7 @@ function setup() {
   // setPixelColor(10, 10, [255, 0, 255, 255]);
   for (var x = 0; x < width; x++){
     for (var y = 0; y < height; y++){
-      setPixelColor(x, y, [random(255), random(255), random(255), 255]);
+      setPixelColor(x, y, [random(100, 255), random(100, 255), random(100, 255), 255]);
     }
   }
   updatePixels();
@@ -105,11 +105,39 @@ function sortedRow(y){
   // }
 }
 
+function compareColors(a, b){
+  // return compareHue(a, b);
+  return compareBrightness(a, b);
+  // return compareSaturation(a, b);
+}
+
 function compareHue(a, b){
   if ( hue(a) < hue(b)){
     return -1;
   }
   if ( hue(a) > hue(b)){
+    return 1;
+  }
+  return 0;
+}
+
+function compareSaturation(a, b){
+  if ( saturation(a) < saturation(b) ){
+    return -1;
+  }
+
+  if ( saturation(a) > saturation(b) ){
+    return 1;
+  }
+  return 0;
+}
+
+function compareBrightness(a, b){
+  if (brightness(a) < brightness(b)){
+    return -1;
+  }
+
+  if (brightness(a) > brightness(b)){
     return 1;
   }
   return 0;
