@@ -1,25 +1,24 @@
 var config = {
     sortMode: "Hue",
-    sortReverse: false
+    sortReverse: false,
+    reset: generateCanvas,
+    canvasStart: 'Random'
 }
 
 var gui = new dat.gui.GUI();
 gui.remember(config);
 gui.add(config, 'sortMode', ['Hue', 'Brightness', 'Saturation']);
 var s = gui.add(config, 'sortReverse');
+gui.add(config, 'canvasStart', ['HSB', 'Random', 'RedGreen']);
+gui.add(config, 'reset');
+
 s.listen();
 
 function setup() {
   createCanvas(640, 640);
   pixelDensity(1);
-  background(51);
-  loadPixels();
-  for (var x = 0; x < width; x++){
-    for (var y = 0; y < height; y++){
-      setPixelColor(x, y, [random(100, 255), random(100, 255), random(100, 255), 255]);
-    }
-  }
-  updatePixels();
+  generateCanvas();
+  console.log("Set to go!");
 }
 
 function draw() {
@@ -158,4 +157,41 @@ function compareBrightness(a, b){
     return 1;
   }
   return 0;
+}
+
+function generateCanvas(){
+  console.log('Generating new canvas');
+  loadPixels();
+  switch(config.canvasStart){
+    // case 'HSB':
+    //   console.log("HSB")
+    //   // colorMode(HSB);
+    //   for (var y = 0; y < height; y++){
+    //     for (var x = 0; x < width; x++){
+    //       var c = color(random(360), random(70, 90), random(70, 90))
+    //       var r = int(red(c));
+    //       var g = int(green(c));
+    //       var b = int(blue(c));
+    //       setPixelColor(x, y, [r, g, b, 255]);
+    //     }
+    //     console.log(y);
+    //   }
+    //   colorMode(RGB);
+    //   break;
+    case 'Random':
+      for (var x = 0; x < width; x++){
+        for (var y = 0; y < height; y++){
+          setPixelColor(x, y, [random(100, 255), random(100, 255), random(100, 255), 255]);
+        }
+      }
+      break;
+    case 'RedGreen':
+      for (var x = 0; x < width; x++){
+        for (var y = 0; y < height; y++){
+          setPixelColor(x, y, [random(0, 255), random(0, 255), 0, 255]);
+        }
+      }
+      break;
+  }
+  updatePixels();
 }
