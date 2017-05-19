@@ -1,3 +1,7 @@
+//  1 = Sort forwards
+// -1 = Sort reverse
+var sortDirection = 1;
+
 function setup() {
   createCanvas(640, 640);
   pixelDensity(1);
@@ -26,6 +30,14 @@ function draw() {
     var mY = mouseY;
     var row = sortedRow(mY);
     setRow(mY, row);
+  }
+}
+
+function keyPressed(){
+  console.log(key);
+  if (key == "T"){
+    sortDirection = sortDirection * -1;
+    console.log(sortDirection);
   }
 }
 
@@ -94,11 +106,11 @@ function sortedColumn(x){
   //   // setPixel(x, i, 255, 255, 255, 255);
   //   return_arr.push([random(255), random(255), random(255), 255]);
   // }
-  return col.sort(compareHue);
+  return col.sort(compareColors);
 }
 
 function sortedRow(y){
-  return getRow(y).sort(compareHue);
+  return getRow(y).sort(compareColors);
   // for (var i = 0; i < width; i++){
   //   setPixel(i, y, 0, 0, 0, 255);
   //   // setPixel(i, y, 255, 255, 255, 255);
@@ -106,8 +118,8 @@ function sortedRow(y){
 }
 
 function compareColors(a, b){
-  // return compareHue(a, b);
-  return compareBrightness(a, b);
+  return compareHue(a, b) * sortDirection;
+  // return compareBrightness(a, b) * sortDirection;
   // return compareSaturation(a, b);
 }
 
