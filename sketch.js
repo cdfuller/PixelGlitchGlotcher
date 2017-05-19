@@ -2,6 +2,14 @@
 // -1 = Sort reverse
 var sortDirection = 1;
 
+var config = {
+    sortMode: "Hue"
+}
+
+var gui = new dat.gui.GUI();
+gui.remember(config);
+gui.add(config, 'sortMode', ['Hue', 'Brightness', 'Saturation']);
+
 function setup() {
   createCanvas(640, 640);
   pixelDensity(1);
@@ -118,9 +126,16 @@ function sortedRow(y){
 }
 
 function compareColors(a, b){
-  return compareHue(a, b) * sortDirection;
-  // return compareBrightness(a, b) * sortDirection;
-  // return compareSaturation(a, b);
+  switch (config.sortMode) {
+    case 'Hue':
+      return compareHue(a, b) * sortDirection;
+    case 'Saturation':
+      return compareSaturation(a, b) * sortDirection;
+    case 'Brightness':
+      return compareBrightness(a, b) * sortDirection;
+    default:
+      return compareHue(a, b) * sortDirection;
+  }
 }
 
 function compareHue(a, b){
