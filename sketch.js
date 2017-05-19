@@ -1,14 +1,13 @@
-//  1 = Sort forwards
-// -1 = Sort reverse
-var sortDirection = 1;
-
 var config = {
-    sortMode: "Hue"
+    sortMode: "Hue",
+    sortReverse: false
 }
 
 var gui = new dat.gui.GUI();
 gui.remember(config);
 gui.add(config, 'sortMode', ['Hue', 'Brightness', 'Saturation']);
+var s = gui.add(config, 'sortReverse');
+s.listen();
 
 function setup() {
   createCanvas(640, 640);
@@ -44,8 +43,8 @@ function draw() {
 function keyPressed(){
   console.log(key);
   if (key == "T"){
-    sortDirection = sortDirection * -1;
-    console.log(sortDirection);
+    config.sortReverse = !config.sortReverse;
+    console.log(config.sortReverse);
   }
 }
 
@@ -126,6 +125,15 @@ function sortedRow(y){
 }
 
 function compareColors(a, b){
+
+  if (config.sortReverse == true){
+    sortDirection = -1;
+    s = true;
+  } else {
+    sortDirection = 1;
+    s = false;
+  }
+
   switch (config.sortMode) {
     case 'Hue':
       return compareHue(a, b) * sortDirection;
