@@ -14,7 +14,6 @@ function setup() {
   pixelDensity(1);
   background(51);
   loadPixels();
-  // setPixelColor(10, 10, [255, 0, 255, 255]);
   for (var x = 0; x < width; x++){
     for (var y = 0; y < height; y++){
       setPixelColor(x, y, [random(100, 255), random(100, 255), random(100, 255), 255]);
@@ -33,7 +32,6 @@ function draw() {
 
   if (keyIsDown(89)){ // 'y'
     console.log('yyy');
-    // sortRow(mouseY);
     var mY = mouseY;
     var row = sortedRow(mY);
     setRow(mY, row);
@@ -62,14 +60,10 @@ function setPixelColor(x, y, c){
 }
 
 function getPixelColor(x, y){
-  // loadPixels();
-  // p = get(x, y, 1, 1);
   var d = pixelDensity();
   var off = (y * width + x) * d * 4;
-  // debugger; 
+
   return [pixels[off], pixels[off+1], pixels[off+2], pixels[off+3]]
-  // return color(p);
-  // return p;
 }
 
 function setColumn(x, col){
@@ -107,21 +101,11 @@ function getRow(y){
 }
 
 function sortedColumn(x){
-  return_arr = [];
-  var col = getColumn(x);
-  // for (var i = 0; i < height; i++){
-  //   // setPixel(x, i, 255, 255, 255, 255);
-  //   return_arr.push([random(255), random(255), random(255), 255]);
-  // }
-  return col.sort(compareColors);
+  return getColumn(x).sort(compareColors);
 }
 
 function sortedRow(y){
   return getRow(y).sort(compareColors);
-  // for (var i = 0; i < width; i++){
-  //   setPixel(i, y, 0, 0, 0, 255);
-  //   // setPixel(i, y, 255, 255, 255, 255);
-  // }
 }
 
 function compareColors(a, b){
@@ -147,10 +131,10 @@ function compareColors(a, b){
 }
 
 function compareHue(a, b){
-  if ( hue(a) < hue(b)){
+  if ( hue(a) < hue(b) ){
     return -1;
   }
-  if ( hue(a) > hue(b)){
+  if ( hue(a) > hue(b) ){
     return 1;
   }
   return 0;
@@ -160,7 +144,6 @@ function compareSaturation(a, b){
   if ( saturation(a) < saturation(b) ){
     return -1;
   }
-
   if ( saturation(a) > saturation(b) ){
     return 1;
   }
@@ -168,21 +151,11 @@ function compareSaturation(a, b){
 }
 
 function compareBrightness(a, b){
-  if (brightness(a) < brightness(b)){
+  if ( brightness(a) < brightness(b) ){
     return -1;
   }
-
-  if (brightness(a) > brightness(b)){
+  if ( brightness(a) > brightness(b) ){
     return 1;
   }
   return 0;
-}
-
-function sortImageByColumn(){
-  for (var i = 0; i < width; i++){
-    console.log(i);
-    var col = sortedColumn(i);
-    setColumn(i, col)
-    updatePixels();
-  }
 }
