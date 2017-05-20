@@ -7,7 +7,16 @@ var config = {
 
 var gui = new dat.gui.GUI();
 gui.remember(config);
-gui.add(config, 'sortMode', ['Hue', 'Brightness', 'Saturation', 'Lightness', 'Red', 'Green', 'Blue']);
+gui.add(config, 'sortMode', [
+                            'Hue', 
+                            'Saturation', 
+                            'Brightness', 
+                            'Lightness', 
+                            'Luminance', 
+                            'Red', 
+                            'Green', 
+                            'Blue',
+                            ]);
 var s = gui.add(config, 'sortReverse');
 gui.add(config, 'canvasStart', ['HSB', 'Random', 'RedGreen']);
 gui.add(config, 'reset');
@@ -134,6 +143,10 @@ function compareColors(a, b){
     case 'Lightness':
       left = lightness(a);
       right = lightness(b);
+      break;
+    case 'Luminance':
+      left = (0.299*red(a) + 0.587*green(a) + 0.114*blue(a))
+      right = (0.299*red(b) + 0.587*green(b) + 0.114*blue(b))
       break;
     case 'Red':
       left = red(a);
