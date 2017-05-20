@@ -2,7 +2,7 @@ var config = {
     sortMode: "Hue",
     sortReverse: false,
     reset: generateCanvas,
-    canvasStart: 'Random'
+    canvasStart: 'HSB'
 }
 
 var gui = new dat.gui.GUI();
