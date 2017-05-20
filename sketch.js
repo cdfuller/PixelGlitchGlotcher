@@ -7,7 +7,7 @@ var config = {
 
 var gui = new dat.gui.GUI();
 gui.remember(config);
-gui.add(config, 'sortMode', ['Hue', 'Brightness', 'Saturation', 'Red']);
+gui.add(config, 'sortMode', ['Hue', 'Brightness', 'Saturation', 'Lightness', 'Red', 'Green', 'Blue']);
 var s = gui.add(config, 'sortReverse');
 gui.add(config, 'canvasStart', ['HSB', 'Random', 'RedGreen']);
 gui.add(config, 'reset');
@@ -108,6 +108,7 @@ function sortedRow(y){
 }
 
 function compareColors(a, b){
+  var left, right;
 
   if (config.sortReverse == true){
     sortDirection = -1;
@@ -119,55 +120,46 @@ function compareColors(a, b){
 
   switch (config.sortMode) {
     case 'Hue':
-      return compareHue(a, b) * sortDirection;
+      left = hue(a);
+      right = hue(b);
+      break;
     case 'Saturation':
-      return compareSaturation(a, b) * sortDirection;
+      left = saturation(a);
+      right = saturation(b);
+      break;
     case 'Brightness':
-      return compareBrightness(a, b) * sortDirection;
+      left = brightness(a);
+      right = brightness(b);
+      break;
+    case 'Lightness':
+      left = lightness(a);
+      right = lightness(b);
+      break;
     case 'Red':
-      return compareRed(a, b) * sortDirection;
+      left = red(a);
+      right = red(b);
+      break;
+    case 'Green':
+      left = green(a);
+      right = green(b);
+      break;
+    case 'Blue':
+      left = blue(a);
+      right = blue(b);
+      break;
     default:
-      return compareHue(a, b) * sortDirection;
-  }
-}
+      left = hue(a);
+      right = hue(b);
+  }  
 
-function compareHue(a, b){
-  if ( hue(a) < hue(b) ){
-    return -1;
+  if ( left < right ){
+    return -1 * sortDirection;
   }
-  if ( hue(a) > hue(b) ){
-    return 1;
-  }
-  return 0;
-}
 
-function compareSaturation(a, b){
-  if ( saturation(a) < saturation(b) ){
-    return -1;
+  if (left > right ){
+    return 1 * sortDirection;
   }
-  if ( saturation(a) > saturation(b) ){
-    return 1;
-  }
-  return 0;
-}
 
-function compareBrightness(a, b){
-  if ( brightness(a) < brightness(b) ){
-    return -1;
-  }
-  if ( brightness(a) > brightness(b) ){
-    return 1;
-  }
-  return 0;
-}
-
-function compareRed(a, b){
-  if ( red(a) < red(b) ){
-    return -1;
-  }
-  if ( red(a) > red(b) ){
-    return 1;
-  }
   return 0;
 }
 
