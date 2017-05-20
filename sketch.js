@@ -7,7 +7,7 @@ var config = {
 
 var gui = new dat.gui.GUI();
 gui.remember(config);
-gui.add(config, 'sortMode', ['Hue', 'Brightness', 'Saturation']);
+gui.add(config, 'sortMode', ['Hue', 'Brightness', 'Saturation', 'Red']);
 var s = gui.add(config, 'sortReverse');
 gui.add(config, 'canvasStart', ['HSB', 'Random', 'RedGreen']);
 gui.add(config, 'reset');
@@ -124,6 +124,8 @@ function compareColors(a, b){
       return compareSaturation(a, b) * sortDirection;
     case 'Brightness':
       return compareBrightness(a, b) * sortDirection;
+    case 'Red':
+      return compareRed(a, b) * sortDirection;
     default:
       return compareHue(a, b) * sortDirection;
   }
@@ -159,26 +161,31 @@ function compareBrightness(a, b){
   return 0;
 }
 
+function compareRed(a, b){
+  if ( red(a) < red(b) ){
+    return -1;
+  }
+  if ( red(a) > red(b) ){
+    return 1;
+  }
+  return 0;
+}
+
 function generateCanvas(){
-  console.log('Generating new canvas');
+  console.log('Generating canvas');
   loadPixels();
   switch(config.canvasStart){
-    // case 'HSB':
-    //   console.log("HSB")
-    //   // colorMode(HSB);
-    //   for (var y = 0; y < height; y++){
-    //     for (var x = 0; x < width; x++){
-    //       var c = color(random(360), random(70, 90), random(70, 90))
-    //       var r = int(red(c));
-    //       var g = int(green(c));
-    //       var b = int(blue(c));
-    //       setPixelColor(x, y, [r, g, b, 255]);
-    //     }
-    //     console.log(y);
-    //   }
-    //   colorMode(RGB);
-    //   break;
+    case 'HSB':
+      console.log("HSB");
+      for (var y = 0; y < height; y++){
+        for (var x = 0; x < width; x++){
+          var c = color(`hsb(${int(random(360))}, 80%, 80%)`);
+          setPixelColor(x, y, c);
+        }
+      }
+      break;
     case 'Random':
+      console.log('Random');
       for (var x = 0; x < width; x++){
         for (var y = 0; y < height; y++){
           setPixelColor(x, y, [random(100, 255), random(100, 255), random(100, 255), 255]);
@@ -186,6 +193,7 @@ function generateCanvas(){
       }
       break;
     case 'RedGreen':
+      console.log('RedGreen');
       for (var x = 0; x < width; x++){
         for (var y = 0; y < height; y++){
           setPixelColor(x, y, [random(0, 255), random(0, 255), 0, 255]);
@@ -194,4 +202,5 @@ function generateCanvas(){
       break;
   }
   updatePixels();
+  console.log("Canvas finished generating");
 }
