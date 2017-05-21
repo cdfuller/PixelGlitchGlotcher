@@ -5,25 +5,10 @@ var config = {
     canvasStart: 'HSB'
 }
 
-var gui = new dat.gui.GUI();
-gui.remember(config);
-gui.add(config, 'sortMode', [
-                            'Hue', 
-                            'Saturation', 
-                            'Brightness', 
-                            'Lightness', 
-                            'Luminance', 
-                            'Red', 
-                            'Green', 
-                            'Blue',
-                            ]);
-var s = gui.add(config, 'sortReverse');
-gui.add(config, 'canvasStart', ['HSB', 'RGB', 'RedGreen']);
-gui.add(config, 'reset');
-
-s.listen();
+var gui, s;
 
 function setup() {
+  createGUI();
   createCanvas(640, 640);
   pixelDensity(1);
   generateCanvas();
@@ -202,4 +187,24 @@ function generateCanvas(){
   }
   updatePixels();
   console.log("Canvas finished generating");
+}
+
+function createGUI(){
+  gui = new dat.gui.GUI();
+  gui.remember(config);
+  gui.add(config, 'sortMode', [
+                              'Hue', 
+                              'Saturation', 
+                              'Brightness', 
+                              'Lightness', 
+                              'Luminance', 
+                              'Red', 
+                              'Green', 
+                              'Blue',
+                              ]);
+  s = gui.add(config, 'sortReverse');
+  gui.add(config, 'canvasStart', ['HSB', 'RGB', 'RedGreen']);
+  gui.add(config, 'reset');
+
+  s.listen();
 }
