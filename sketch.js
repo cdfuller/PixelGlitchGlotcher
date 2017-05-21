@@ -18,7 +18,7 @@ gui.add(config, 'sortMode', [
                             'Blue',
                             ]);
 var s = gui.add(config, 'sortReverse');
-gui.add(config, 'canvasStart', ['HSB', 'Random', 'RedGreen']);
+gui.add(config, 'canvasStart', ['HSB', 'RGB', 'RedGreen']);
 gui.add(config, 'reset');
 
 s.listen();
@@ -161,6 +161,8 @@ function compareColors(a, b){
       right = blue(b);
       break;
     default:
+      console.error(`sortMode "#{config.sortMode}" not found`);
+      console.log("Sorting by hue");
       left = hue(a);
       right = hue(b);
   }  
@@ -179,32 +181,24 @@ function compareColors(a, b){
 function generateCanvas(){
   console.log('Generating canvas');
   loadPixels();
-  switch(config.canvasStart){
-    case 'HSB':
-      console.log("HSB");
-      for (var y = 0; y < height; y++){
-        for (var x = 0; x < width; x++){
+  for (var y = 0; y < height; y++){
+    for (var x = 0; x < width; x++){
+      switch(config.canvasStart){
+        case 'HSB':
           var c = color(`hsb(${int(random(360))}, 80%, 80%)`);
           setPixelColor(x, y, c);
-        }
-      }
-      break;
-    case 'Random':
-      console.log('Random');
-      for (var x = 0; x < width; x++){
-        for (var y = 0; y < height; y++){
-          setPixelColor(x, y, [random(100, 255), random(100, 255), random(100, 255), 255]);
-        }
-      }
-      break;
-    case 'RedGreen':
-      console.log('RedGreen');
-      for (var x = 0; x < width; x++){
-        for (var y = 0; y < height; y++){
+          break;
+        case 'RGB':
+          setPixelColor(x, y, [random(100, 255), random(100, 255), random(100, 255), 255]);     
+          break;
+        case 'RedGreen':
           setPixelColor(x, y, [random(0, 255), random(0, 255), 0, 255]);
-        }
+          break;
+        default:
+          // Set an ugly brown if canvasStart preset doesn't match
+          setPixelColor(x, y, color('brown'));
       }
-      break;
+    }
   }
   updatePixels();
   console.log("Canvas finished generating");
