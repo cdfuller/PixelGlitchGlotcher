@@ -1,8 +1,9 @@
 var config = {
+    canvasStart: 'HSB',
     sortMode: "Hue",
     sortReverse: false,
     reset: generateCanvas,
-    canvasStart: 'HSB'
+    saveImage: saveImage,
 }
 
 var gui, s;
@@ -163,6 +164,10 @@ function compareColors(a, b){
   return 0;
 }
 
+function saveImage(){
+  saveCanvas('PixelGlitch', 'jpg');
+}
+
 function generateCanvas(){
   console.log('Generating canvas');
   loadPixels();
@@ -205,6 +210,7 @@ function createGUI(){
   s = gui.add(config, 'sortReverse');
   gui.add(config, 'canvasStart', ['HSB', 'RGB', 'RedGreen']);
   gui.add(config, 'reset');
+  gui.add(config, 'saveImage');
 
   s.listen();
 }
