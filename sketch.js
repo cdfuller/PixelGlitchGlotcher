@@ -134,6 +134,10 @@ function compareColors(a, b){
       left = (0.299*red(a) + 0.587*green(a) + 0.114*blue(a))
       right = (0.299*red(b) + 0.587*green(b) + 0.114*blue(b))
       break;
+    case 'Absolute':
+      left = red(a) + green(a) + blue(a);
+      right = red(b) + green(b) + blue(b);
+      break;
     case 'Red':
       left = red(a);
       right = red(b);
@@ -181,6 +185,9 @@ function generateCanvas(){
         case 'RGB':
           setPixelColor(x, y, [random(100, 255), random(100, 255), random(100, 255), 255]);     
           break;
+        case 'Red':
+          setPixelColor(x, y, [random(0, 255), 0, 0, 255]);
+          break;
         case 'RedGreen':
           setPixelColor(x, y, [random(0, 255), random(0, 255), 0, 255]);
           break;
@@ -203,12 +210,13 @@ function createGUI(){
                               'Brightness', 
                               'Lightness', 
                               'Luminance', 
+                              'Absolute',
                               'Red', 
                               'Green', 
                               'Blue',
                               ]);
   s = gui.add(config, 'sortReverse');
-  gui.add(config, 'canvasStart', ['HSB', 'RGB', 'RedGreen']);
+  gui.add(config, 'canvasStart', ['HSB', 'RGB', 'Red', 'RedGreen']);
   gui.add(config, 'reset');
   gui.add(config, 'saveImage');
 
