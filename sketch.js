@@ -200,7 +200,9 @@ function generateCanvas(){
     for (var x = 0; x < width; x++){
       switch(config.canvasStart){
         case 'HSB':
-          var c = color(`hsb(${int(random(360))}, 80%, 80%)`);
+          var sat = int(random(70, 90));
+          var brt = int(random(70, 90));
+          var c = color(`hsb(${int(random(360))}, ${sat}%, ${brt}%)`);
           setPixelColor(x, y, c);
           break;
         case 'RGB':
