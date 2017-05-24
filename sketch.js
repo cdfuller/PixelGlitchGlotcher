@@ -4,9 +4,12 @@ var config = {
     sortReverse: false,
     reset: generateCanvas,
     saveImage: saveImage,
+    "Sort All Columns": sortAllColumns,
+    "Sort All Rows": sortAllRows,
 }
 
 var gui, s;
+
 
 function setup() {
   createGUI();
@@ -100,6 +103,24 @@ function sortedColumn(x){
 
 function sortedRow(y){
   return getRow(y).sort(compareColors);
+}
+
+function sortAllColumns(){
+  for (var x = 0; x < width; x++){
+    var col = sortedColumn(x);
+    setColumn(x, col);
+    console.log(x);
+  }
+  console.log("Sorted All Columns");
+}
+
+function sortAllRows(){
+  for (var y = 0; y < height; y++){
+    var row = sortedRow(y);
+    setRow(y, row);
+    console.log(y);
+  }
+  console.log("Sorted All Rows");
 }
 
 function compareColors(a, b){
@@ -215,6 +236,8 @@ function createGUI(){
                               'Green', 
                               'Blue',
                               ]);
+  gui.add(config, "Sort All Columns");
+  gui.add(config, "Sort All Rows");
   s = gui.add(config, 'sortReverse');
   gui.add(config, 'canvasStart', ['HSB', 'RGB', 'Red', 'RedGreen']);
   gui.add(config, 'reset');
