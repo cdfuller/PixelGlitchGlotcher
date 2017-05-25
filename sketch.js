@@ -6,6 +6,12 @@ var config = {
     saveImage: saveImage,
     "Sort All Columns": sortAllColumns,
     "Sort All Rows": sortAllRows,
+    "minR": 0,
+    "minG": 0,
+    "minB": 0,
+    "maxR": 255,
+    "maxG": 255,
+    "maxB": 255,
 }
 
 var gui;
@@ -39,7 +45,7 @@ function keyPressed(){
   console.log(key);
   if (key == "T"){
     config.sortReverse = !config.sortReverse;
-    console.log(config.sortReverse);
+    console.log("Sort direction:", config.sortReverse);
   }
 }
 
@@ -210,7 +216,14 @@ function generateCanvas(){
           setPixelColor(x, y, [random(0, 255), 0, 0, 255]);
           break;
         case 'RedGreen':
-          setPixelColor(x, y, [random(0, 255), random(0, 255), 0, 255]);
+          setPixelColor(x, y, [random(0, 255), random(0, 50), 0, 255]);
+          break;
+        case 'Custom':
+          // Get random number in ranges
+          var r = int(random(config.minR, config.maxR));
+          var g = int(random(config.minG, config.maxG));
+          var b = int(random(config.minB, config.maxB));
+          setPixelColor(x, y, [r, g, b, 255]);
           break;
         default:
           // Set an ugly brown if canvasStart preset doesn't match
@@ -239,7 +252,15 @@ function createGUI(){
   gui.add(config, "Sort All Columns");
   gui.add(config, "Sort All Rows");
   gui.add(config, 'sortReverse').listen();
-  gui.add(config, 'canvasStart', ['HSB', 'RGB', 'Red', 'RedGreen']);
-  gui.add(config, 'reset');
+
+  var genFolder= gui.addFolder("Canvas Generation");
+  genFolder.add(config, 'canvasStart', ['HSB', 'RGB', 'Red', 'RedGreen', 'Custom']);
+  genFolder.add(config, 'minR').min(0).max(255).step(1);
+  genFolder.add(config, 'minG').min(0).max(255).step(1);
+  genFolder.add(config, 'minB').min(0).max(255).step(1);
+  genFolder.add(config, 'maxR').min(0).max(255).step(1);
+  genFolder.add(config, 'maxG').min(0).max(255).step(1);
+  genFolder.add(config, 'maxB').min(0).max(255).step(1);
+  genFolder.add(config, 'reset');
   gui.add(config, 'saveImage');
 }
