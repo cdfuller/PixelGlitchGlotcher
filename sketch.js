@@ -8,7 +8,7 @@ var config = {
     "Sort All Rows": sortAllRows,
 }
 
-var gui, s;
+var gui;
 
 
 function setup() {
@@ -128,10 +128,8 @@ function compareColors(a, b){
 
   if (config.sortReverse == true){
     sortDirection = -1;
-    s = true;
   } else {
     sortDirection = 1;
-    s = false;
   }
 
   switch (config.sortMode) {
@@ -240,10 +238,8 @@ function createGUI(){
                               ]);
   gui.add(config, "Sort All Columns");
   gui.add(config, "Sort All Rows");
-  s = gui.add(config, 'sortReverse');
+  gui.add(config, 'sortReverse').listen();
   gui.add(config, 'canvasStart', ['HSB', 'RGB', 'Red', 'RedGreen']);
   gui.add(config, 'reset');
   gui.add(config, 'saveImage');
-
-  s.listen();
 }
