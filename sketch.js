@@ -1,17 +1,18 @@
 var config = {
-    canvasStart: 'HSB',
+    canvasStart: "HSB",
     sortMode: "Hue",
     sortReverse: false,
     reset: generateCanvas,
     saveImage: saveImage,
     "Sort All Columns": sortAllColumns,
     "Sort All Rows": sortAllRows,
-    "minR": 0,
-    "minG": 0,
+    "minA": 0,
     "minB": 0,
-    "maxR": 255,
-    "maxG": 255,
+    "minC": 0,
+    "maxA": 255,
     "maxB": 255,
+    "maxC": 255,
+    "sortOffset": 0,
 }
 
 var gui;
@@ -104,11 +105,19 @@ function getRow(y){
 }
 
 function sortedColumn(x){
-  return getColumn(x).sort(compareColors);
+  if (config.sortOffset == 0){
+    return getColumn(x).sort(compareColors);
+  } else {
+    return offsetArray(config.sortOffset, getColumn(x).sort(compareColors));
+  }
 }
 
 function sortedRow(y){
-  return getRow(y).sort(compareColors);
+  if (config.sortOffset == 0){
+    return getRow(y).sort(compareColors);
+  } else {
+    return offsetArray(config.sortOffset, getRow(y).sort(compareColors));
+  }
 }
 
 function sortAllColumns(){
@@ -218,12 +227,35 @@ function generateCanvas(){
         case 'RedGreen':
           setPixelColor(x, y, [random(0, 255), random(0, 50), 0, 255]);
           break;
-        case 'Custom':
-          // Get random number in ranges
-          var r = int(random(config.minR, config.maxR));
-          var g = int(random(config.minG, config.maxG));
-          var b = int(random(config.minB, config.maxB));
+        case 'Custom RGB':
+          var r, g, b;
+
+          if (config.minA == config.maxA){
+            r = config.minA;
+          } else {
+            r = int(random(config.minA, config.maxA));
+          }
+
+          if (config.minB == config.maxB){
+            g = config.minB;
+          } else {
+            g = int(random(config.minB, config.maxB));
+          }
+
+          if (config.minC == config.maxC){
+            b = config.minC;
+          } else {
+            b = int(random(config.minC, config.maxC));
+          }
+
           setPixelColor(x, y, [r, g, b, 255]);
+          break;
+        case 'Custom HSB':
+          var h = int(random(config.minA, config.maxA));
+          var s = int(random(config.minB, config.maxB));
+          var b = int(random(config.minC, config.maxC));
+          var c = color(`hsb(${h}, ${s}%, ${b}%)`);
+          setPixelColor(x, y, c)
           break;
         default:
           // Set an ugly brown if canvasStart preset doesn't match
@@ -249,18 +281,41 @@ function createGUI(){
                               'Green', 
                               'Blue',
                               ]);
+  gui.add(config, 'sortOffset').min(-640).max(640).step(5);
   gui.add(config, "Sort All Columns");
   gui.add(config, "Sort All Rows");
   gui.add(config, 'sortReverse').listen();
 
   var genFolder= gui.addFolder("Canvas Generation");
-  genFolder.add(config, 'canvasStart', ['HSB', 'RGB', 'Red', 'RedGreen', 'Custom']);
-  genFolder.add(config, 'minR').min(0).max(255).step(1);
-  genFolder.add(config, 'minG').min(0).max(255).step(1);
-  genFolder.add(config, 'minB').min(0).max(255).step(1);
-  genFolder.add(config, 'maxR').min(0).max(255).step(1);
-  genFolder.add(config, 'maxG').min(0).max(255).step(1);
+  genFolder.add(config, 'canvasStart', {
+                                        "HSB: H(R) S(80) B(80)": "HSB",
+                                        "RGB: R(R) B(R) G(R)": 'RGB',
+                                        'H(R(a-A)) S(R(a-A)) B(R(a-A))': 'Custom HSB',
+                                        'R(R(a-A)) G(R(a-A)) B(R(a-A))': 'Custom RGB',
+                                        "Red: R(R) G(0) B(0)": 'Red',
+                                        "Green: R(0) G(R) B(0)": 'Green',
+                                        "Blue: R(0) B(0) G(R)": 'Blue',
+                                        'RedGreen: R(R) G(R) B(0)': 'RedGreen',
+                                      });
+  genFolder.add(config, 'minA').min(0).max(359).step(1);
+  genFolder.add(config, 'maxA').min(0).max(360).step(1);
+  genFolder.add(config, 'minB').min(0).max(254).step(1);
   genFolder.add(config, 'maxB').min(0).max(255).step(1);
+  genFolder.add(config, 'minC').min(0).max(254).step(1);
+  genFolder.add(config, 'maxC').min(0).max(255).step(1);
   genFolder.add(config, 'reset');
   gui.add(config, 'saveImage');
+}
+
+function offsetArray(val, arr){
+  if (val < 0){
+    for (var i = 0; i > val; i--){
+      arr.unshift(arr.pop());
+    }
+  } else {
+    for (var i = 0; i < val; i++){
+      arr.push(arr.shift());
+    }
+  }
+  return arr;
 }
