@@ -203,7 +203,7 @@ function compareColors(a, b){
 }
 
 function saveImage(){
-  saveCanvas('PixelGlitch', 'jpg');
+  saveCanvas('PixelGlitch', 'png');
 }
 
 function generateCanvas(){
