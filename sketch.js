@@ -192,6 +192,10 @@ function compareColors(a, b){
       left = blue(a);
       right = blue(b);
       break;
+    case 'Offset':
+      left = 0;
+      right = 1;
+      break;
     default:
       console.error(`sortMode "#{config.sortMode}" not found`);
       console.log("Sorting by hue");
@@ -288,6 +292,7 @@ function createGUI(){
                               'Red', 
                               'Green', 
                               'Blue',
+                              'Offset',
                               ]);
   gui.add(config, 'sortOffset').min(-640).max(640).step(5);
   gui.add(config, "Sort All Columns");
