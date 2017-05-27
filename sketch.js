@@ -208,6 +208,26 @@ function compareColors(a, b){
       left = 0;
       right = 1;
       break;
+    case 'Hue + Luminance':
+      left = (0.299*red(a) + 0.587*green(a) + 0.114*blue(a)) + hue(a);
+      right = (0.299*red(b) + 0.587*green(b) + 0.114*blue(b)) + hue(b);
+      break;
+    case 'Hue ÷ Saturation':
+      left = hue(a) / saturation(a);
+      right = hue(b) / saturation(b);
+      break;
+    case 'Hue x Saturation':
+      left = hue(a) * saturation(a);
+      right = hue(b) * saturation(b);
+      break;
+    case 'Hue + Sat + Bri':
+      left = hue(a) + saturation(a) + brightness(a);
+      right = hue(b) + saturation(b) + brightness(b);
+      break;
+    case 'Experimental':
+      left = hue(a) + (saturation(a) * brightness(a));
+      right = hue(b) + (saturation(b) * brightness(b));
+      break;
     default:
       console.error(`sortMode "#{config.sortMode}" not found`);
       console.log("Sorting by hue");
@@ -308,6 +328,11 @@ function createGUI(){
                               'Yellow',
                               'Magenta',
                               'Offset',
+                              'Hue + Luminance',
+                              'Hue ÷ Saturation',
+                              'Hue x Saturation',
+                              'Hue + Sat + Bri',
+                              'Experimental',
                               ]);
   gui.add(config, 'sortOffset').min(-400).max(400).step(5);
   gui.add(config, "Sort All Columns");
