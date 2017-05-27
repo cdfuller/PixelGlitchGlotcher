@@ -294,7 +294,7 @@ function createGUI(){
                               'Blue',
                               'Offset',
                               ]);
-  gui.add(config, 'sortOffset').min(-640).max(640).step(5);
+  gui.add(config, 'sortOffset').min(-400).max(400).step(5);
   gui.add(config, "Sort All Columns");
   gui.add(config, "Sort All Rows");
   gui.add(config, 'sortReverse').listen();
