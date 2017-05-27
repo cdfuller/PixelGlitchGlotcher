@@ -15,7 +15,7 @@ var config = {
     "sortOffset": 0,
 }
 
-const filename = "karly.jpg";
+const filename = "input/karly.jpg";
 
 var gui;
 var img;
@@ -192,6 +192,18 @@ function compareColors(a, b){
       left = blue(a);
       right = blue(b);
       break;
+    case 'Cyan':
+      left = green(a) + blue(a);
+      right = green(b) + blue(b);
+      break;
+    case 'Yellow':
+      left = red(a) + green(a);
+      right = red(b) + green(b);
+      break;
+    case 'Magenta':
+      left = red(a) + blue(a);
+      right = red(b) + blue(b);
+      break;
     case 'Offset':
       left = 0;
       right = 1;
@@ -292,6 +304,9 @@ function createGUI(){
                               'Red', 
                               'Green', 
                               'Blue',
+                              'Cyan',
+                              'Yellow',
+                              'Magenta',
                               'Offset',
                               ]);
   gui.add(config, 'sortOffset').min(-400).max(400).step(5);
