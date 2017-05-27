@@ -79,7 +79,7 @@ function getPixelColor(x, y){
 }
 
 function setColumn(x, col){
-  loadPixels();
+  // loadPixels();
   for (var i = 0; i < height; i++){
     setPixelColor(x, i, col[i]);
   }
@@ -96,7 +96,7 @@ function getColumn(x){
 }
 
 function setRow(y, row){
-  loadPixels();
+  // loadPixels();
   for (var i = 0; i < width; i++){
     setPixelColor(i, y, row[i]);
   }
