@@ -15,14 +15,22 @@ var config = {
     "sortOffset": 0,
 }
 
-var gui;
+const filename = "karly.jpg";
 
+var gui;
+var img;
+
+function preload(){
+  img = loadImage(filename);
+}
 
 function setup() {
   createGUI();
-  createCanvas(640, 640);
+  createCanvas(img.width, img.height);
+  // createCanvas(640, 640);
   pixelDensity(1);
-  generateCanvas();
+  // generateCanvas();
+  image(img, 0, 0);
   console.log("Set to go!");
 }
 
