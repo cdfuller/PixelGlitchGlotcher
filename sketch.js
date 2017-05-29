@@ -342,7 +342,7 @@ function createGUI(){
   var genFolder= gui.addFolder("Canvas Generation");
   genFolder.add(config, 'canvasStart', {
                                         "HSB: H(R) S(80) B(80)": "HSB",
-                                        "RGB: R(R) B(R) G(R)": 'RGB',
+                                        "RGB: Rand(100-255)": 'RGB',
                                         'H(R(a-A)) S(R(a-A)) B(R(a-A))': 'Custom HSB',
                                         'R(R(a-A)) G(R(a-A)) B(R(a-A))': 'Custom RGB',
                                         "Red: R(R) G(0) B(0)": 'Red',
