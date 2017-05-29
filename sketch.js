@@ -257,8 +257,8 @@ function generateCanvas(){
     for (var x = 0; x < width; x++){
       switch(config.canvasStart){
         case 'HSB':
-          var sat = int(random(70, 90));
-          var brt = int(random(70, 90));
+          var sat = 80;
+          var brt = 80;
           var c = color(`hsb(${int(random(360))}, ${sat}%, ${brt}%)`);
           setPixelColor(x, y, c);
           break;
