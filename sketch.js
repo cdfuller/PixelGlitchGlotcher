@@ -26,7 +26,8 @@ function preload(){
 
 function setup() {
   createGUI();
-  createCanvas(img.width, img.height);
+  var canvas = createCanvas(img.width, img.height);
+  canvas.parent('sketch-container');
   // createCanvas(640, 640);
   pixelDensity(1);
   // generateCanvas();
