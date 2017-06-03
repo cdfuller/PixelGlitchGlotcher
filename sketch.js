@@ -266,6 +266,12 @@ function generateCanvas(){
         case 'Red':
           setPixelColor(x, y, [random(0, 255), 0, 0, 255]);
           break;
+        case 'Green':
+          setPixelColor(x, y, [0, random(0, 255), 0, 255]);
+          break;
+        case 'Blue':
+          setPixelColor(x, y, [0, 0, random(0, 255), 255]);
+          break;
         case 'RedGreen':
           setPixelColor(x, y, [random(0, 255), random(0, 50), 0, 255]);
           break;
