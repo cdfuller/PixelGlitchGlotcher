@@ -2,7 +2,7 @@ var config = {
     canvasStart: "HSB",
     sortMode: "Hue",
     sortReverse: false,
-    reset: generateCanvas,
+    reset: renderCanvas,
     saveImage: saveImage,
     "Sort All Columns": sortAllColumns,
     "Sort All Rows": sortAllRows,
@@ -21,24 +21,14 @@ var gui;
 var img;
 
 function preload(){
+  createGUI();
   if (config['canvasStart'] == 'Image'){
     img = loadImage(filename);
   }
 }
 
 function setup() {
-  createGUI();
-  if (config['canvasStart'] == 'Image'){
-    var canvas = createCanvas(img.width, img.height);
-    canvas.parent('sketch-container');
-    pixelDensity(1);
-    image(img, 0, 0);
-  } else {
-    var canvas = createCanvas(640, 640);
-    canvas.parent('sketch-container');
-    pixelDensity(1);
-    generateCanvas();
-  }
+  renderCanvas();
   console.log("Setup finished.");
 }
 
@@ -317,6 +307,20 @@ function generateCanvas(){
   }
   updatePixels();
   console.log("Canvas finished generating");
+}
+
+function renderCanvas(){
+  if (config['canvasStart'] == 'Image'){
+    var canvas = createCanvas(img.width, img.height);
+    canvas.parent('sketch-container');
+    pixelDensity(1);
+    image(img, 0, 0);
+  } else {
+    var canvas = createCanvas(640, 640);
+    canvas.parent('sketch-container');
+    pixelDensity(1);
+    generateCanvas();
+  }
 }
 
 function createGUI(){
