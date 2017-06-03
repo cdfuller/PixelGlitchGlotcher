@@ -21,18 +21,25 @@ var gui;
 var img;
 
 function preload(){
-  img = loadImage(filename);
+  if (config['canvasStart'] == 'Image'){
+    img = loadImage(filename);
+  }
 }
 
 function setup() {
   createGUI();
-  var canvas = createCanvas(img.width, img.height);
-  canvas.parent('sketch-container');
-  // createCanvas(640, 640);
-  pixelDensity(1);
-  // generateCanvas();
-  image(img, 0, 0);
-  console.log("Set to go!");
+  if (config['canvasStart'] == 'Image'){
+    var canvas = createCanvas(img.width, img.height);
+    canvas.parent('sketch-container');
+    pixelDensity(1);
+    image(img, 0, 0);
+  } else {
+    var canvas = createCanvas(640, 640);
+    canvas.parent('sketch-container');
+    pixelDensity(1);
+    generateCanvas();
+  }
+  console.log("Setup finished.");
 }
 
 function draw() {
@@ -350,6 +357,7 @@ function createGUI(){
                                         "Green: R(0) G(R) B(0)": 'Green',
                                         "Blue: R(0) B(0) G(R)": 'Blue',
                                         'RedGreen: R(R) G(R) B(0)': 'RedGreen',
+                                        'Image': 'Image',
                                       });
   genFolder.add(config, 'minA').min(0).max(359).step(1);
   genFolder.add(config, 'maxA').min(0).max(360).step(1);
