@@ -12,6 +12,7 @@ function preload(){
 
 function setup() {
   renderCanvas();
+  loadPixels();
   console.log("Setup finished.");
 }
 
@@ -29,6 +30,7 @@ function draw() {
     var row = sortedRow(mY);
     setRow(mY, row);
   }
+  updatePixels();
 }
 
 function keyPressed(){
@@ -63,12 +65,10 @@ function setColumn(x, col){
   for (var i = 0; i < height; i++){
     setPixelColor(x, i, col[i]);
   }
-  updatePixels();
 }
 
 function getColumn(x){
   var col = [];
-  loadPixels();
   for (var i = 0; i < height; i++){
     col.push(getPixelColor(x, i));
   }
@@ -79,12 +79,10 @@ function setRow(y, row){
   for (var i = 0; i < width; i++){
     setPixelColor(i, y, row[i]);
   }
-  updatePixels();
 }
 
 function getRow(y){
   var row = [];
-  loadPixels();
   for (var i = 0; i < width; i++){
     row.push(getPixelColor(i, y));
   }
@@ -231,7 +229,6 @@ function saveImage(){
 
 function generateCanvas(){
   console.log('Generating canvas');
-  loadPixels();
   for (var y = 0; y < height; y++){
     for (var x = 0; x < width; x++){
       switch(config.canvasStart){
@@ -292,7 +289,6 @@ function generateCanvas(){
       }
     }
   }
-  updatePixels();
   console.log("Canvas finished generating");
 }
 
