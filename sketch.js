@@ -35,6 +35,11 @@ function keyPressed() {
   if (key == "T") {
     config.sortReverse = !config.sortReverse;
     console.log("Sort direction:", config.sortReverse);
+  } else if (key == "M") {
+    var idx = SORT_MODES.indexOf(config.sortMode);
+    var new_mode = SORT_MODES[(idx + 1) % SORT_MODES.length];
+    config.sortMode = new_mode;
+    console.log("Sort mode: ", config.sortMode);
   }
 }
 
@@ -97,7 +102,6 @@ function setRow(y, row) {
 
 function getRow(y) {
   var row = [];
-  // loadPixels();
   for (var i = 0; i < width; i++) {
     row.push(getPixelColor(i, y));
   }
@@ -245,11 +249,8 @@ function compareColors(a, b) {
 
   switch (sort_mode) {
     case 'Hue':
-      // left = hue(a);
-      // right = hue(b);
       left = getHue(a);
       right = getHue(b);
-      // debugger;
       break;
     case 'Saturation':
       left = saturation(a);

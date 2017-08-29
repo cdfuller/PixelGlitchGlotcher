@@ -39,7 +39,7 @@ var config = {
 function createGUI(){
   gui = new dat.gui.GUI();
   gui.remember(config);
-  gui.add(config, 'sortMode', SORT_MODES);
+  gui.add(config, 'sortMode', SORT_MODES).listen();
   gui.add(config, 'sortOffset').min(-400).max(400).step(5);
   gui.add(config, "Sort All Columns");
   gui.add(config, "Sort All Rows");
