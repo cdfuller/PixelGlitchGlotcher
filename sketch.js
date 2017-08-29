@@ -3,9 +3,12 @@ const filename = "input/karly.jpg";
 var gui;
 var img;
 
-function preload(){
+var comparisons = 0;
+var sort_mode;
+
+function preload() {
   createGUI();
-  if (config['canvasStart'] == 'Image'){
+  if (config['canvasStart'] == 'Image') {
     img = loadImage(filename);
   }
 }
@@ -18,126 +21,235 @@ function setup() {
 function draw() {
   if (keyIsDown(88)) { // 'x'
     console.log('xxx');
-    var mX = mouseX;
-    var col = sortedColumn(mX);
-    setColumn(mX, col)
+    sortColumn(mouseX);
   }
 
-  if (keyIsDown(89)){ // 'y'
+  if (keyIsDown(89)) { // 'y'
     console.log('yyy');
-    var mY = mouseY;
-    var row = sortedRow(mY);
-    setRow(mY, row);
+    sortRow(mouseY);
   }
 }
 
-function keyPressed(){
+function keyPressed() {
   console.log(key);
-  if (key == "T"){
+  if (key == "T") {
     config.sortReverse = !config.sortReverse;
     console.log("Sort direction:", config.sortReverse);
   }
 }
 
-function setPixelColor(x, y, c){
+function setPixelColor(x, y, c) {
   var d = pixelDensity();
-  for (var i = 0; i< d; i++){
-    for (var j = 0; j < d; j++){
+  for (var i = 0; i< d; i++) {
+    for (var j = 0; j < d; j++) {
       idx = 4 * ((y * d + j) * width * d + (x * d + i));
-      pixels[idx] = red(c);
-      pixels[idx+1] = green(c);
-      pixels[idx+2] = blue(c);
-      pixels[idx+3] = alpha(c);
+      pixels[idx] = c[0];
+      pixels[idx+1] = c[1];
+      pixels[idx+2] = c[2];
+      pixels[idx+3] = c[3];
     }
   }
 }
 
-function getPixelColor(x, y){
+function getPixelColor(x, y) {
   var d = pixelDensity();
   var off = (y * width + x) * d * 4;
 
   return [pixels[off], pixels[off+1], pixels[off+2], pixels[off+3]]
 }
 
-function setColumn(x, col){
-  for (var i = 0; i < height; i++){
+function setColumn(x, col) {
+  for (var i = 0; i < height; i++) {
     setPixelColor(x, i, col[i]);
   }
-  updatePixels();
 }
 
-function getColumn(x){
+function getColumn(x) {
   var col = [];
-  loadPixels();
-  for (var i = 0; i < height; i++){
+  for (var i = 0; i < height; i++) {
     col.push(getPixelColor(x, i));
   }
   return col;
 }
 
-function setRow(y, row){
-  for (var i = 0; i < width; i++){
+function sortColumn(x) {
+  loadPixels();
+  sort_mode = config.sortMode;
+  var col = sortedColumn(x);
+  setColumn(x, col);
+  updatePixels();
+}
+
+function sortRow(y) {
+  loadPixels();
+  sort_mode = config.sortMode;
+  var row = sortedRow(y);
+  setRow(y, row);
+  updatePixels();
+}
+
+function setRow(y, row) {
+  for (var i = 0; i < width; i++) {
     setPixelColor(i, y, row[i]);
   }
   updatePixels();
 }
 
-function getRow(y){
+function getRow(y) {
   var row = [];
-  loadPixels();
-  for (var i = 0; i < width; i++){
+  // loadPixels();
+  for (var i = 0; i < width; i++) {
     row.push(getPixelColor(i, y));
   }
   return row;
 }
 
-function sortedColumn(x){
-  if (config.sortOffset == 0){
+function sortedColumn(x) {
+  if (config.sortOffset == 0) {
     return getColumn(x).sort(compareColors);
   } else {
     return offsetArray(config.sortOffset, getColumn(x).sort(compareColors));
   }
 }
 
-function sortedRow(y){
-  if (config.sortOffset == 0){
+function sortedRow(y) {
+  if (config.sortOffset == 0) {
     return getRow(y).sort(compareColors);
   } else {
     return offsetArray(config.sortOffset, getRow(y).sort(compareColors));
   }
 }
 
-function sortAllColumns(){
-  for (var x = 0; x < width; x++){
+function sortAllColumns() {
+  sort_mode = config.sortMode;
+  loadPixels();
+
+  console.log("Sorting ", width, " columns");
+  t0 = performance.now();
+
+  for (var x = 0; x < width; x+=1) {
     var col = sortedColumn(x);
     setColumn(x, col);
-    console.log(x);
   }
-  console.log("Sorted All Columns");
+  updatePixels();
+  
+  t1 = performance.now();
+  console.log("Sorted All Columns", (t1 - t0));
+  console.log("Comparisons", comparisons);
+  
+  comparisons = 0;
 }
 
-function sortAllRows(){
-  for (var y = 0; y < height; y++){
+function sortAllRows() {
+  sort_mode = config.sortMode;
+  loadPixels();
+
+  console.log("Sorting ", height, " rows");
+  t0 = performance.now();
+
+  for (var y = 0; y < height; y++) {
     var row = sortedRow(y);
     setRow(y, row);
-    console.log(y);
   }
-  console.log("Sorted All Rows");
+
+  updatePixels();
+  
+  t1 = performance.now();
+  console.log("Sorted All Rows", (t1 - t0));
+  console.log("Comparisons", comparisons);
+
+  comparisons = 0;
 }
 
-function compareColors(a, b){
-  var left, right;
 
-  if (config.sortReverse == true){
-    sortDirection = -1;
-  } else {
-    sortDirection = 1;
+// Taken from p5js
+// Original: p5.ColorConversion._rgbaToHSBA
+function getHue(rgba) {
+  var red = rgba[0];
+  var green = rgba[1];
+  var blue = rgba[2];
+
+  var val = Math.max(red, green, blue);
+  var chroma = val - Math.min(red, green, blue);
+
+  var hue, sat;
+  if (chroma === 0) {  // Return early if grayscale.
+    hue = 0;
+    sat = 0;
+  }
+  else {
+    // sat = chroma / val;
+    if (red === val) {  // Magenta to yellow.
+      hue = (green - blue) / chroma;
+    } else if (green === val) { // Yellow to cyan.
+      hue = 2 + (blue - red) / chroma;
+    } else if (blue === val) {  // Cyan to magenta.
+      hue = 4 + (red - green) / chroma;
+    }
+    if (hue < 0) {  // Confine hue to the interval [0, 1).
+      hue += 6;
+    } else if (hue >= 6) {
+      hue -= 6;
+    }
   }
 
-  switch (config.sortMode) {
+  // return [hue / 6, sat, val, rgba[3]];
+  return hue / 6;
+};
+
+
+// Stolen from threejs
+// Might be useful for getting sat and lightness
+// 
+// function getHue3( rgb) {
+  
+//       // h,s,l ranges are in 0.0 - 1.0
+  
+//       // var hsl = optionalTarget || { h: 0, s: 0, l: 0 };
+  
+//       var r = rgb[0]; 
+//       var g = rgb[1];
+//       var b = rgb[2];
+  
+//       var max = Math.max( r, g, b );
+//       var min = Math.min( r, g, b );
+  
+//       var hue
+//       // var saturation;
+//       // var lightness = ( min + max ) / 2.0;
+  
+//       if ( min === max ) {
+//         hue = 0;
+//         // saturation = 0;
+//       } else {
+//         var delta = max - min;
+//         // saturation = lightness <= 0.5 ? delta / ( max + min ) : delta / ( 2 - max - min );
+//         switch ( max ) {
+//           case r: hue = ( g - b ) / delta + ( g < b ? 6 : 0 ); break;
+//           case g: hue = ( b - r ) / delta + 2; break;
+//           case b: hue = ( r - g ) / delta + 4; break;
+//         }
+//         hue /= 6;
+//       }
+//       return hue;
+//       // hsl.h = hue;
+//       // hsl.s = saturation;
+//       // hsl.l = lightness;
+//       // return hsl;
+//     }
+
+function compareColors(a, b) {
+  var [redA, greenA, blueA] = a;
+  var [redB, greenB, blueB] = b;
+  var left, right;
+
+  switch (sort_mode) {
     case 'Hue':
-      left = hue(a);
-      right = hue(b);
+      // left = hue(a);
+      // right = hue(b);
+      left = getHue(a);
+      right = getHue(b);
+      // debugger;
       break;
     case 'Saturation':
       left = saturation(a);
@@ -152,36 +264,36 @@ function compareColors(a, b){
       right = lightness(b);
       break;
     case 'Luminance':
-      left = (0.299*red(a) + 0.587*green(a) + 0.114*blue(a))
-      right = (0.299*red(b) + 0.587*green(b) + 0.114*blue(b))
+      left = 0.299*redA + 0.587*greenA + 0.114*blueA;
+      right = 0.299*redB + 0.587*greenB + 0.114*blueB;
       break;
     case 'Absolute':
-      left = red(a) + green(a) + blue(a);
-      right = red(b) + green(b) + blue(b);
+      left = redA + greenA + blueA;
+      right = redB + greenB + blueB;
       break;
     case 'Red':
-      left = red(a);
-      right = red(b);
+      left = redA;
+      right = redB;
       break;
     case 'Green':
-      left = green(a);
-      right = green(b);
+      left = greenA;
+      right = greenB;
       break;
     case 'Blue':
-      left = blue(a);
-      right = blue(b);
+      left = blueA;
+      right = blueB;
       break;
     case 'Cyan':
-      left = green(a) + blue(a);
-      right = green(b) + blue(b);
+      left = greenA + blueA;
+      right = greenB + blueB;
       break;
     case 'Yellow':
-      left = red(a) + green(a);
-      right = red(b) + green(b);
+      left = redA + greenA;
+      right = redB + greenB;
       break;
     case 'Magenta':
-      left = red(a) + blue(a);
-      right = red(b) + blue(b);
+      left = redA + blueA;
+      right = redB + blueB;
       break;
     case 'Offset':
       left = 0;
@@ -213,33 +325,39 @@ function compareColors(a, b){
       left = hue(a);
       right = hue(b);
   }  
+  comparisons++;
 
-  if ( left < right ){
+  if (config.sortReverse == true) {
+    sortDirection = -1;
+  } else {
+    sortDirection = 1;
+  }
+
+  if ( left < right ) {
     return -1 * sortDirection;
-  }
-
-  if (left > right ){
+  } else if ( left > right ) {
     return 1 * sortDirection;
+  } else {
+    return 0;
   }
 
-  return 0;
 }
 
-function saveImage(){
+function saveImage() {
   saveCanvas('PixelGlitch', 'png');
 }
 
-function generateCanvas(){
+function generateCanvas() {
   console.log('Generating canvas');
-  loadPixels();
-  for (var y = 0; y < height; y++){
-    for (var x = 0; x < width; x++){
-      switch(config.canvasStart){
+  var canvasStart = config.canvasStart
+  for (var y = 0; y < height; y++) {
+    for (var x = 0; x < width; x++) {
+      switch(canvasStart) {
         case 'HSB':
           var sat = 80;
           var brt = 80;
           var c = color(`hsb(${int(random(360))}, ${sat}%, ${brt}%)`);
-          setPixelColor(x, y, c);
+          setPixelColor(x, y, c.levels);
           break;
         case 'RGB':
           setPixelColor(x, y, [random(100, 255), random(100, 255), random(100, 255), 255]);     
@@ -259,19 +377,19 @@ function generateCanvas(){
         case 'Custom RGB':
           var r, g, b;
 
-          if (config.minA == config.maxA){
+          if (config.minA == config.maxA) {
             r = config.minA;
           } else {
             r = int(random(config.minA, config.maxA));
           }
 
-          if (config.minB == config.maxB){
+          if (config.minB == config.maxB) {
             g = config.minB;
           } else {
             g = int(random(config.minB, config.maxB));
           }
 
-          if (config.minC == config.maxC){
+          if (config.minC == config.maxC) {
             b = config.minC;
           } else {
             b = int(random(config.minC, config.maxC));
@@ -296,27 +414,29 @@ function generateCanvas(){
   console.log("Canvas finished generating");
 }
 
-function renderCanvas(){
-  if (config['canvasStart'] == 'Image'){
+function renderCanvas() {
+  if (config['canvasStart'] == 'Image') {
     var canvas = createCanvas(img.width, img.height);
     canvas.parent('sketch-container');
     pixelDensity(1);
+    loadPixels();
     image(img, 0, 0);
   } else {
     var canvas = createCanvas(640, 640);
     canvas.parent('sketch-container');
     pixelDensity(1);
+    loadPixels();
     generateCanvas();
   }
 }
 
-function offsetArray(val, arr){
-  if (val < 0){
-    for (var i = 0; i > val; i--){
+function offsetArray(val, arr) {
+  if (val < 0) {
+    for (var i = 0; i > val; i--) {
       arr.unshift(arr.pop());
     }
   } else {
-    for (var i = 0; i < val; i++){
+    for (var i = 0; i < val; i++) {
       arr.push(arr.shift());
     }
   }
