@@ -20,7 +20,7 @@ SORT_MODES = [
   ]
 
 var config = {
-    canvasStart: "HSB",
+    canvasStart: "Image",
     sortMode: "Hue",
     sortReverse: false,
     reset: renderCanvas,
