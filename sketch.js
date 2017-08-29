@@ -247,6 +247,8 @@ function compareColors(a, b) {
   var [redB, greenB, blueB] = b;
   var left, right;
 
+  // TODO
+  // Convert this ugly switch statement to use an object literal
   switch (sort_mode) {
     case 'Hue':
       left = getHue(a);
@@ -301,30 +303,30 @@ function compareColors(a, b) {
       right = 1;
       break;
     case 'Hue + Luminance':
-      left = (0.299*red(a) + 0.587*green(a) + 0.114*blue(a)) + hue(a);
-      right = (0.299*red(b) + 0.587*green(b) + 0.114*blue(b)) + hue(b);
+      left = (0.299*redA + 0.587*greenA + 0.114*blueA) + getHue(a);
+      right = (0.299*redB + 0.587*greenB + 0.114*blueB) + getHue(b);
       break;
     case 'Hue ÷ Saturation':
-      left = hue(a) / saturation(a);
-      right = hue(b) / saturation(b);
+      left = getHue(a) / saturation(a);
+      right = getHue(b) / saturation(b);
       break;
     case 'Hue x Saturation':
-      left = hue(a) * saturation(a);
-      right = hue(b) * saturation(b);
+      left = getHue(a) * saturation(a);
+      right = getHue(b) * saturation(b);
       break;
     case 'Hue + Sat + Bri':
-      left = hue(a) + saturation(a) + brightness(a);
-      right = hue(b) + saturation(b) + brightness(b);
+      left = getHue(a) + saturation(a) + brightness(a);
+      right = getHue(b) + saturation(b) + brightness(b);
       break;
     case 'Experimental':
-      left = hue(a) + (saturation(a) * brightness(a));
-      right = hue(b) + (saturation(b) * brightness(b));
+      left = getHue(a) + (saturation(a) * brightness(a));
+      right = getHue(b) + (saturation(b) * brightness(b));
       break;
     default:
       console.error(`sortMode "#{config.sortMode}" not found`);
       console.log("Sorting by hue");
-      left = hue(a);
-      right = hue(b);
+      left = getHue(a);
+      right = getHue(b);
   }  
   comparisons++;
 
