@@ -9,13 +9,13 @@ SORT_MODES = {
     return getHue(c);
   },
   'Saturation': function(c) {
-    return saturation(c);
+    return getSaturation(c);
   },
   'Brightness': function(c) {
-    return brightness(c);
+    return getBrightness(c);
   },
   'Lightness': function(c) {
-    return lightness(c);
+    return getLightness(c);
   },
   'Luminance': function(c) {
     return getLuminance(c);
@@ -49,16 +49,16 @@ SORT_MODES = {
     return getHue(c) + getLuminance(c);
   },
   'Hue ÷ Saturation': function(c) {
-    return getHue(c) + saturation(c);
+    return getHue(c) + getSaturation(c);
   },
   'Hue x Saturation': function(c) {
-    return getHue(c) * saturation(c);
+    return getHue(c) * getSaturation(c);
   },
   'Hue + Sat + Bri': function(c) {
-    return getHue(c) + saturation(c) + brightness(c);
+    return getHue(c) + getSaturation(c) + getBrightness(c);
   },
   'Experimental': function(c) {
-    return getHue(c) + (saturation(c) * brightness(c));
+    return getHue(c) + (getSaturation(c) * getBrightness(c));
   },
 }
 
@@ -103,6 +103,46 @@ function getHue(rgba) {
   return hue / 6;
 };
 
+function getSaturation(rgba) {
+  var red = rgba[0];
+  var green = rgba[1];
+  var blue = rgba[2];
+
+  var val = Math.max(red, green, blue);
+  var chroma = val - Math.min(red, green, blue);
+
+  var sat;
+  if (chroma === 0) {  // Return early if grayscale.
+    sat = 0;
+  }
+  else {
+    sat = chroma / val;
+  }
+
+  return sat;
+};
+
+function getBrightness(rgba) {
+  var red = rgba[0];
+  var green = rgba[1];
+  var blue = rgba[2];
+
+  var val = Math.max(red, green, blue);
+
+  return val;
+};
+
+function getLightness(rgba) {
+  var red = rgba[0];
+  var green = rgba[1];
+  var blue = rgba[2];
+
+  var val = Math.max(red, green, blue);
+  var min = Math.min(red, green, blue);
+  var li = (val + min) / 2;
+
+  return li;
+}
 
 function getLuminance(c){
   return 0.299*c[0] + 0.587*c[1] + 0.114*c[2];
