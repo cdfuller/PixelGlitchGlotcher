@@ -20,6 +20,9 @@ SORT_MODES = {
   'Luminance': function(c) {
     return getLuminance(c);
   },
+  'Chroma': function(c) {
+    return getChroma(c);
+  },
   'Absolute': function(c) {
     // r + g + b
     return c[0] + c[1] + c[2];
@@ -146,4 +149,15 @@ function getLightness(rgba) {
 
 function getLuminance(c){
   return 0.299*c[0] + 0.587*c[1] + 0.114*c[2];
+}
+
+function getChroma(c){
+  var red = c[0];
+  var blue = c[1];
+  var green = c[2];
+
+  var val = Math.max(red, green, blue);
+  var chroma = val - Math.min(red, green, blue);
+
+  return chroma;
 }
