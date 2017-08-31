@@ -1,24 +1,3 @@
-SORT_MODES = [
-  'Hue',
-  'Saturation',
-  'Brightness',
-  'Lightness',
-  'Luminance',
-  'Absolute',
-  'Red',
-  'Green',
-  'Blue',
-  'Cyan',
-  'Yellow',
-  'Magenta',
-  'Offset',
-  'Hue + Luminance',
-  'Hue ÷ Saturation',
-  'Hue x Saturation',
-  'Hue + Sat + Bri',
-  'Experimental',
-  ]
-
 var config = {
     canvasStart: "Image",
     sortMode: "Hue",
@@ -39,7 +18,7 @@ var config = {
 function createGUI(){
   gui = new dat.gui.GUI();
   gui.remember(config);
-  gui.add(config, 'sortMode', SORT_MODES).listen();
+  gui.add(config, 'sortMode', Object.keys(SORT_MODES)).listen();
   gui.add(config, 'sortOffset').min(-400).max(400).step(5);
   gui.add(config, "Sort All Columns");
   gui.add(config, "Sort All Rows");
