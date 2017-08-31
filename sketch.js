@@ -36,8 +36,10 @@ function keyPressed() {
     config.sortReverse = !config.sortReverse;
     console.log("Sort direction:", config.sortReverse);
   } else if (key == "M") {
-    var idx = SORT_MODES.indexOf(config.sortMode);
-    var new_mode = SORT_MODES[(idx + 1) % SORT_MODES.length];
+    var sort_modes_arr = Object.keys(SORT_MODES);
+    var idx = sort_modes_arr.indexOf(config.sortMode);
+    var next_idx = (idx + 1) % sort_modes_arr.length;
+    var new_mode = sort_modes_arr[next_idx];
     config.sortMode = new_mode;
     console.log("Sort mode: ", config.sortMode);
   }
