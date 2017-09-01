@@ -42,6 +42,10 @@ function keyPressed() {
     var new_mode = sort_modes_arr[next_idx];
     config.sortMode = new_mode;
     console.log("Sort mode: ", config.sortMode);
+  } else if (key == 'R') {
+    sortAllRows();
+  } else if (key == 'C') {
+    sortAllColumns();
   }
 }
 
