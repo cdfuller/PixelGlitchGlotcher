@@ -19,7 +19,7 @@ function createGUI(){
   gui = new dat.gui.GUI();
   gui.remember(config);
   gui.add(config, 'sortMode', Object.keys(SORT_MODES)).listen();
-  gui.add(config, 'sortOffset').min(-400).max(400).step(5);
+  gui.add(config, 'sortOffset').min(-400).max(400).step(1);
   gui.add(config, "Sort All Columns");
   gui.add(config, "Sort All Rows");
   gui.add(config, 'sortReverse').listen();
