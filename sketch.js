@@ -103,7 +103,6 @@ function setRow(y, row) {
   for (var i = 0; i < width; i++) {
     setPixelColor(i, y, row[i]);
   }
-  updatePixels();
 }
 
 function getRow(y) {
