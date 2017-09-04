@@ -40,6 +40,10 @@ function keyPressed() {
     var new_mode = SORT_MODES[(idx + 1) % SORT_MODES.length];
     config.sortMode = new_mode;
     console.log("Sort mode: ", config.sortMode);
+  } else if (key == 'V') {
+    sortAllRows();
+  } else if (key == 'C') {
+    sortAllColumns();
   }
 }
 
