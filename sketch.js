@@ -8,6 +8,8 @@ var img;
 var comparisons = 0;
 var sort_mode;
 
+var pixel_density;
+
 function preload() {
   createGUI();
   if (config['canvasStart'] == 'Image') {
@@ -52,7 +54,7 @@ function keyPressed() {
 }
 
 function setPixelColor(x, y, c) {
-  var d = pixelDensity();
+  var d = pixel_density;
   for (var i = 0; i< d; i++) {
     for (var j = 0; j < d; j++) {
       idx = 4 * ((y * d + j) * width * d + (x * d + i));
@@ -65,7 +67,7 @@ function setPixelColor(x, y, c) {
 }
 
 function getPixelColor(x, y) {
-  var d = pixelDensity();
+  var d = pixel_density;
   var off = (y * width + x) * d * 4;
 
   return [pixels[off], pixels[off+1], pixels[off+2], pixels[off+3]]
@@ -225,6 +227,7 @@ function renderCanvas() {
     loadPixels();
     generateCanvas();
   }
+  pixel_density = pixelDensity();
 }
 
 function offsetArray(val, arr) {
