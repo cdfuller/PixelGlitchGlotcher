@@ -1,6 +1,7 @@
-const filename = "input/karly.jpg";
-// const filename = "input/scrambled-rgb.png";
+// const filename = "input/karly.jpg";
 
+// const filename = "input/scrambled-rgb.png";
+const filename = "input/starrynight.jpg";
 var gui;
 var img;
 
