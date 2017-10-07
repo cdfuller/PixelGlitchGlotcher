@@ -63,6 +63,9 @@ SORT_MODES = {
   'Experimental': function(c) {
     return getHue(c) + (getSaturation(c) * getBrightness(c));
   },
+  'Red x Blue': function(c) {
+    return (c[0] + 1) / (c[2] + 1);
+  },
 }
 
 

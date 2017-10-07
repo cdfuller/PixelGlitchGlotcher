@@ -6,7 +6,9 @@ var gui;
 var img;
 
 var comparisons = 0;
+var secondary_sort_mode;
 var sort_mode;
+var secondary;
 
 var pixel_density;
 
@@ -135,6 +137,7 @@ function sortedRow(y) {
 
 function sortAllColumns() {
   sort_mode = config.sortMode;
+  secondary_sort_mode = config.secondarySort;
   loadPixels();
 
   console.log("Sorting ", width, " columns");
@@ -149,7 +152,9 @@ function sortAllColumns() {
   t1 = performance.now();
   console.log("Sorted All Columns", (t1 - t0));
   console.log("Comparisons", comparisons);
+  console.log('Secondary', secondary);
   
+  secondary = 0;
   comparisons = 0;
 }
 
@@ -190,6 +195,17 @@ function compareColors(a, b) {
     return -1 * sortDirection;
   } else if ( left > right ) {
     return 1 * sortDirection;
+  } else if (secondary_sort_mode !== 'None') {
+    secondary++;
+    var l = SORT_MODES[secondary_sort_mode](a);
+    var r = SORT_MODES[secondary_sort_mode](b);
+    if ( l < r ) {
+      return -1 * sortDirection;
+    } else if ( l > r ) {
+      return 1 * sortDirection;
+    } else {
+      return 0;
+    }
   } else {
     return 0;
   }

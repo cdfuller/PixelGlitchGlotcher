@@ -1,6 +1,7 @@
 var config = {
     canvasStart: 'Image',
     sortMode: "Hue",
+    secondarySort: 'None',
     sortReverse: false,
     reset: renderCanvas,
     saveImage: saveImage,
@@ -16,9 +17,14 @@ var config = {
 }
 
 function createGUI(){
+  var sort_modes = Object.keys(SORT_MODES);
+  var secondary_sort_modes = Object.keys(SORT_MODES);
+  secondary_sort_modes.unshift('None');
+
   gui = new dat.gui.GUI();
   gui.remember(config);
-  gui.add(config, 'sortMode', Object.keys(SORT_MODES)).listen();
+  gui.add(config, 'sortMode', sort_modes).listen();
+  gui.add(config, 'secondarySort', secondary_sort_modes)
   gui.add(config, 'sortOffset').min(-400).max(400).step(1);
   gui.add(config, "Sort All Columns");
   gui.add(config, "Sort All Rows");
