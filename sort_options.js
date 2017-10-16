@@ -66,6 +66,12 @@ SORT_MODES = {
   'Red x Blue': function(c) {
     return (c[0] + 1) / (c[2] + 1);
   },
+  'Dark/Light': function(c) {
+    return int((c[0] + c[1] + c[2]) / 128);
+  },
+  'Grey Shades(8)': function(c) {
+    return int((c[0] + c[1] + c[2]) / 16);
+  }
 }
 
 
