@@ -160,6 +160,7 @@ function sortAllColumns() {
 
 function sortAllRows() {
   sort_mode = config.sortMode;
+  secondary_sort_mode = config.secondarySort;
   loadPixels();
 
   console.log("Sorting ", height, " rows");
