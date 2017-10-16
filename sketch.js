@@ -180,6 +180,30 @@ function sortAllRows() {
   comparisons = 0;
 }
 
+function shiftImageVertical() {
+  loadPixels();
+  var offset = config['sortOffset'];
+
+  for (var x = 0; x < width; x++) {
+    var col = getColumn(x);
+    col = offsetArray(offset, col);
+    setColumn(x, col);
+  }
+  updatePixels();
+}
+
+function shiftImageHorizontal() {
+  loadPixels();
+  var offset = config['sortOffset'];
+
+  for (var y = 0; y < height; y++) {
+    var row = getRow(y);
+    row = offsetArray(offset, row);
+    setRow(y ,row);
+  }
+  updatePixels();
+}
+
 function compareColors(a, b) {
   comparisons++;
 

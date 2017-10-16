@@ -45,9 +45,6 @@ SORT_MODES = {
   'Magenta': function(c) {
     return c[0] + c[2];
   },
-  'Offset (Disabled)': function(c) {
-    return 0;
-  },
   'Hue + Luminance': function(c) {
     return getHue(c) + getLuminance(c);
   },

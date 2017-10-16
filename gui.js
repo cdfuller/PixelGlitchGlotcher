@@ -7,6 +7,8 @@ var config = {
     saveImage: saveImage,
     "Sort All Columns": sortAllColumns,
     "Sort All Rows": sortAllRows,
+    "Shift Horizontal": shiftImageHorizontal,
+    "Shift Vertical": shiftImageVertical,
     "minA": 0,
     "minB": 0,
     "minC": 0,
@@ -25,9 +27,11 @@ function createGUI(){
   gui.remember(config);
   gui.add(config, 'sortMode', sort_modes).listen();
   gui.add(config, 'secondarySort', secondary_sort_modes)
-  gui.add(config, 'sortOffset').min(-400).max(400).step(1);
   gui.add(config, "Sort All Columns");
   gui.add(config, "Sort All Rows");
+  gui.add(config, 'sortOffset').min(-400).max(400).step(1);
+  gui.add(config, 'Shift Horizontal');
+  gui.add(config, 'Shift Vertical');
   gui.add(config, 'sortReverse').listen();
 
   var genFolder= gui.addFolder("Canvas Generation");
