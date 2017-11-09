@@ -1,7 +1,7 @@
 // const filename = "input/karly.jpg";
-
+const filename = "input/starrynight.jpg"
 // const filename = "input/scrambled-rgb.png";
-const filename = "input/04_woooo.png";
+// const filename = "input/04_woooo.png";
 var gui;
 var img;
 
