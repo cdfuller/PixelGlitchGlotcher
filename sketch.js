@@ -92,6 +92,7 @@ function getColumn(x) {
 function sortColumn(x) {
   loadPixels();
   sort_mode = config.sortMode;
+  secondary_sort_mode = config.secondarySort;
   var col = sortedColumn(x);
   setColumn(x, col);
   updatePixels();
@@ -100,6 +101,7 @@ function sortColumn(x) {
 function sortRow(y) {
   loadPixels();
   sort_mode = config.sortMode;
+  secondary_sort_mode = config.secondarySort;
   var row = sortedRow(y);
   setRow(y, row);
   updatePixels();
