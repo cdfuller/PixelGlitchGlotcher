@@ -53,6 +53,8 @@ GENERATE_MODES = {
     } else {
       b = int(random(config.minC, config.maxC));
     }
+
+    return [r, g, b, 255];
   },
   "Red: R(R) G(0) B(0)": function() {
     var r = random(0, 255);
