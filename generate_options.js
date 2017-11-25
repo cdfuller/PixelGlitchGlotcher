@@ -1,3 +1,5 @@
+console.error("'H(R(a-A)) S(R(a-A)) B(R(a-A))' isn't using HSB values");
+
 GENERATE_MODES = {
   'HSB: H(R) S(80) B(80)': function(x, y) {
     var sat = 80;
