@@ -1,81 +1,37 @@
-
-// All sort modes take in a color array ([r, g, b, a]) and return a numeric value
+// All sort modes take in a color array ([r, g, b, a]) and return an int
 // 
 // In: [10, 22, 53, 255]
-// Out: 114.4
+// Out: 114
 // 
 SORT_MODES = {
-  'Hue': function(c) {
-    return getHue(c);
-  },
-  'Saturation': function(c) {
-    return getSaturation(c);
-  },
-  'Brightness': function(c) {
-    return getBrightness(c);
-  },
-  'Lightness': function(c) {
-    return getLightness(c);
-  },
-  'Luminance': function(c) {
-    return getLuminance(c);
-  },
-  'Chroma': function(c) {
-    return getChroma(c);
-  },
-  'Absolute': function(c) {
-    // r + g + b
-    return c[0] + c[1] + c[2];
-  },
-  'Red': function(c) {
-    return c[0];
-  },
-  'Green': function(c) {
-    return c[1];
-  },
-  'Blue': function(c) {
-    return c[2];
-  },
-  'Cyan': function(c) {
-    return c[1] + c[2];
-  },
-  'Yellow': function(c) {
-    return c[0] + c[1];
-  },
-  'Magenta': function(c) {
-    return c[0] + c[2];
-  },
-  'Hue + Luminance': function(c) {
-    return getHue(c) + getLuminance(c);
-  },
-  'Hue ÷ Saturation': function(c) {
-    return getHue(c) + getSaturation(c);
-  },
-  'Hue x Saturation': function(c) {
-    return getHue(c) * getSaturation(c);
-  },
-  'Hue + Sat + Bri': function(c) {
-    return getHue(c) + getSaturation(c) + getBrightness(c);
-  },
-  'Experimental': function(c) {
-    return getHue(c) + (getSaturation(c) * getBrightness(c));
-  },
-  'Red x Blue': function(c) {
-    return (c[0] + 1) / (c[2] + 1);
-  },
-  'Dark/Light': function(c) {
-    return int((c[0] + c[1] + c[2]) / 128);
-  },
-  'Grey Shades(8)': function(c) {
-    return int((c[0] + c[1] + c[2]) / 16);
-  }
+  'Hue': { 'max': 360, 'func': (c) => getHue(c) },
+  'Saturation': (c) => getSaturation(c),
+  'Brightness': (c) => getBrightness(c),
+  'Lightness': (c) => getLightness(c),
+  'Luminance': (c) => getLuminance(c),
+  'Chroma': (c) => getChroma(c),
+  'Absolute': { 'max': 255*3, 'func': (c) => c[0] + c[1] + c[2] },
+  'Red': { 'max': 255, 'func': (c) => c[0] },
+  'Green': { 'max': 255, 'func': (c) => c[1] },
+  'Blue': { 'max': 255, 'func': (c) => c[2] },
+  'Cyan': { 'max': 510, 'func': (c) => c[1] + c[2] },
+  'Yellow': { 'max': 510, 'func': (c) => c[0] + c[1] },
+  'Magenta': { 'max': 510, 'func': (c) => c[0] + c[2] },
+  'Hue + Luminance': (c) => getHue(c) + getLuminance(c),
+  'Hue ÷ Saturation': (c) => getHue(c) + getSaturation(c),
+  'Hue x Saturation': (c) => getHue(c) * getSaturation(c),
+  'Hue + Sat + Bri': (c) => getHue(c) + getSaturation(c) + getBrightness(c),
+  'Experimental': (c) => getHue(c) + (getSaturation(c) * getBrightness(c)),
+  'Red x Blue': (c) => (c[0] + 1) / (c[2] + 1),
+  'Black/White(2)': { 'max': 2, 'func': (c) => int(getBrightness(c) / 128) },
+  'Shades(6)': { 'max': 6, 'func': (c) => int((c[0] + c[1] + c[2]) / 128) },
+  'Shades(48)': {max: 47, 'func': (c) => int((c[0] + c[1] + c[2]) / 16) },
 }
 
 
 //
 // Helper functions to keep SORT_MODES short and readable
 //
-
 
 // Taken from p5js
 // Original: p5.ColorConversion._rgbaToHSBA
@@ -108,8 +64,7 @@ function getHue(rgba) {
     }
   }
 
-  // return [hue / 6, sat, val, rgba[3]];
-  return hue / 6;
+  return int(hue / 6 * 360);
 };
 
 function getSaturation(rgba) {

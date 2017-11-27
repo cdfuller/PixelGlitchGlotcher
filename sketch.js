@@ -1,3 +1,5 @@
+console.error('secondary_sort not working with new sorting algorithm')
+
 // const filename = "input/karly.jpg";
 const filename = "input/starrynight.jpg"
 // const filename = "input/scrambled-rgb.png";
@@ -26,13 +28,13 @@ function setup() {
 
 function draw() {
   if (keyIsDown(88)) { // 'x'
-    console.log('xxx');
-    sortColumn(mouseX);
+    console.log('xxx', mouseX);
+    sortColumn(int(mouseX));
   }
 
   if (keyIsDown(89)) { // 'y'
-    console.log('yyy');
-    sortRow(mouseY);
+    console.log('yyy', mouseY);
+    sortRow(int(mouseY));
   }
 }
 
@@ -93,7 +95,8 @@ function sortColumn(x) {
   loadPixels();
   sort_mode = config.sortMode;
   secondary_sort_mode = config.secondarySort;
-  var col = sortedColumn(x);
+  var col = getColumn(x);
+  sortSet(col)
   setColumn(x, col);
   updatePixels();
 }
@@ -121,6 +124,36 @@ function getRow(y) {
   return row;
 }
 
+
+/////////////////////////////////////////////////////////////
+// NEW ALGORITHM
+/////////////////////////////////////////////////////////////
+function sortSet(pxl_array, max, key) {
+
+  let count = [];
+  let i = max;
+  while (i >= 0) {
+    count[i--] = new Array();
+  }
+
+  for (let i = 0; i < pxl_array.length; i++) {
+    let k = key(pxl_array[i]);
+    count[k].push(pxl_array[i]);
+  }
+
+  for (let i = 0, j = 0; i <= max; i++) {
+    while (count[i].length > 0) {
+      let e = count[i].pop();
+      pxl_array[j++] = e;
+    }
+  }
+}
+
+
+
+/////////////////////////////////////////////////////////////
+// OLD ALGORITHM
+/////////////////////////////////////////////////////////////
 function sortedColumn(x) {
   if (config.sortOffset == 0) {
     return getColumn(x).sort(compareColors);
@@ -128,6 +161,9 @@ function sortedColumn(x) {
     return offsetArray(config.sortOffset, getColumn(x).sort(compareColors));
   }
 }
+
+/////////////////////////////////////////////////////////////
+
 
 function sortedRow(y) {
   if (config.sortOffset == 0) {
@@ -145,9 +181,19 @@ function sortAllColumns() {
   console.log("Sorting ", width, " columns");
   t0 = performance.now();
 
-  for (var x = 0; x < width; x+=1) {
-    var col = sortedColumn(x);
-    setColumn(x, col);
+  if ('max' in SORT_MODES[sort_mode]) {
+    console.log(sort_mode);
+    sort_mode = SORT_MODES[config.sortMode];
+    for (var x = 0; x < width; x+=1) {
+        var col = getColumn(x);
+        sortSet(col, sort_mode['max'], sort_mode['func']);
+        setColumn(x, col);
+      }
+  } else {
+    for (var x = 0; x < width; x+=1) {
+      var col = sortedColumn(x);
+      setColumn(x, col);
+    }
   }
   updatePixels();
   
@@ -168,11 +214,20 @@ function sortAllRows() {
   console.log("Sorting ", height, " rows");
   t0 = performance.now();
 
-  for (var y = 0; y < height; y++) {
-    var row = sortedRow(y);
-    setRow(y, row);
+  if ('max' in SORT_MODES[sort_mode]) {
+    console.log(sort_mode);
+    sort_mode = SORT_MODES[config.sortMode];
+    for (var y = 0; y < height; y+=1) {
+        var row = getRow(y);
+        sortSet(row, sort_mode['max'], sort_mode['func']);
+        setRow(y, row);
+      }
+  } else {
+    for (var y = 0; y < height; y+=1) {
+      var row = sortedRow(y);
+      setRow(y, row);
+    }
   }
-
   updatePixels();
   
   t1 = performance.now();
