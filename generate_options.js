@@ -7,10 +7,7 @@ GENERATE_MODES = {
     var c = color(`hsb(${int(random(360))}, ${sat}%, ${brt}%)`);
     return c.levels
   },
-  'RGB: Rand(100-255)': function() {
-    c =  [random(100, 255), random(100, 255), random(100, 255), 255];
-    return c;
-  },
+  'RGB: Rand(100-255)': () => [random(100, 255), random(100, 255), random(100, 255), 255],
   'RGB: Random(0-255)': () => [random(0, 255), random(0, 255), random(0, 255), 255],
   'H(R(a-A)) S(R(a-A)) B(R(a-A))': function() {
     // 
@@ -59,27 +56,9 @@ GENERATE_MODES = {
 
     return [r, g, b, 255];
   },
-  "Red: R(R) G(0) B(0)": function() {
-    var r = random(0, 255);
-    var g = 0;
-    var b = 0;
-
-    return [r, g, b, 255];
-  },
-  "Green: R(0) G(R) B(0)": function() {
-    var r = 0;
-    var g = random(0, 255);
-    var b = 0;
-    
-    return [r, g, b, 255];
-  },
-  "Blue: R(0) B(0) G(R)": function() {
-    var r = 0;
-    var g = 0;
-    var b = random(0, 255);
-
-    return [r, g, b, 255];
-  },
+  "Red: R(R) G(0) B(0)": () => [random(0, 255), 0, 0, 255],
+  "Green: R(0) G(R) B(0)": () => [0, random(0, 255), 0, 255],
+  "Blue: R(0) B(0) G(R)": () => [0, 0, random(0, 255), 255],
   // 'RedGreen: R(R) G(R) B(0)': 'RedGreen',
   'Image': 'Image',
 }
