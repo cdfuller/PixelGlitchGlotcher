@@ -1,13 +1,13 @@
 console.error("'H(R(a-A)) S(R(a-A)) B(R(a-A))' isn't using HSB values");
 
 GENERATE_MODES = {
-  'HSB: H(R) S(80) B(80)': function(x, y) {
+  'HSB: H(R) S(80) B(80)': function() {
     var sat = 80;
     var brt = 80;
     var c = color(`hsb(${int(random(360))}, ${sat}%, ${brt}%)`);
     return c.levels
   },
-  'RGB: Rand(100-255)': function(x, y) {
+  'RGB: Rand(100-255)': function() {
     c =  [random(100, 255), random(100, 255), random(100, 255), 255];
     return c;
   },

@@ -248,7 +248,7 @@ function generateCanvas() {
   var canvasStart = GENERATE_MODES[config.canvasStart]
   for (var y = 0; y < height; y++) {
     for (var x = 0; x < width; x++) {
-      var c = canvasStart(x, y);
+      var c = canvasStart();
       setPixelColor(x, y, c);
     }
   }
