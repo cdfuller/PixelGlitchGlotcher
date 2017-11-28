@@ -11,6 +11,7 @@ GENERATE_MODES = {
     c =  [random(100, 255), random(100, 255), random(100, 255), 255];
     return c;
   },
+  'RGB: Random(0-255)': () => [random(0, 255), random(0, 255), random(0, 255), 255],
   'H(R(a-A)) S(R(a-A)) B(R(a-A))': function() {
     // 
     var r, g, b;
