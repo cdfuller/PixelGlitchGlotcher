@@ -2,6 +2,7 @@ console.error("'H(R(a-A)) S(R(a-A)) B(R(a-A))' isn't using HSB values");
 
 GENERATE_MODES = {
   'HSB: H(R) S(80) B(80)': () => HSBtoRGB(int(random(360)), 80, 80),
+  'HSB: H(R) S(100) B(100)': () => HSBtoRGB(int(random(360)), 100, 100),
   'RGB: Rand(100-255)': () => [random(100, 255), random(100, 255), random(100, 255), 255],
   'RGB: Random(0-255)': () => [random(0, 255), random(0, 255), random(0, 255), 255],
   'H(R(a-A)) S(R(a-A)) B(R(a-A))': function() {
