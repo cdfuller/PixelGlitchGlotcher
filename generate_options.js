@@ -1,12 +1,7 @@
 console.error("'H(R(a-A)) S(R(a-A)) B(R(a-A))' isn't using HSB values");
 
 GENERATE_MODES = {
-  'HSB: H(R) S(80) B(80)': function() {
-    var sat = 80;
-    var brt = 80;
-    var c = color(`hsb(${int(random(360))}, ${sat}%, ${brt}%)`);
-    return c.levels
-  },
+  'HSB: H(R) S(80) B(80)': () => HSBtoRGB(int(random(360)), 80, 80),
   'RGB: Rand(100-255)': () => [random(100, 255), random(100, 255), random(100, 255), 255],
   'RGB: Random(0-255)': () => [random(0, 255), random(0, 255), random(0, 255), 255],
   'H(R(a-A)) S(R(a-A)) B(R(a-A))': function() {
@@ -61,4 +56,63 @@ GENERATE_MODES = {
   "Blue: R(0) B(0) G(R)": () => [0, 0, random(0, 255), 255],
   // 'RedGreen: R(R) G(R) B(0)': 'RedGreen',
   'Image': 'Image',
+}
+
+
+function HSBtoRGB(hue, saturation, brightness) {
+  let r, g, b;
+  saturation = saturation / 100;
+  brightness = brightness / 100;
+
+  if (saturation == 0) {
+    r = g = b = brightness;
+  } else {
+    if ( hue == 360) {
+      hue = 0;
+    }
+    hue = hue / 60;
+    let i = int(hue);
+    let f = hue - i;
+    let p = brightness * (1 - saturation);
+    let q = brightness * (1 - saturation * f);
+    let t = brightness * (1 - saturation * (1 - f));
+
+    switch (i) {
+      case 0:
+        r = brightness;
+        g = t;
+        b = p;
+        break;
+      case 1:
+        r = q;
+        g = brightness;
+        b = p;
+        break;
+      case 2:
+        r = p;
+        g = brightness;
+        b = t;
+        break;
+      case 3:
+        r = p;
+        g = q;
+        b = brightness;
+        break;
+      case 4:
+        r = t;
+        g = p;
+        b = brightness;
+        break;
+      case 5:
+      default:
+        r = brightness;
+        g = p;
+        b = q;
+        break;
+    }
+  }
+  r = Math.round(r * 255);
+  g = Math.round(g * 255);
+  b = Math.round(b * 255);
+  return [r, g, b, 255];
 }
