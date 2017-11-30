@@ -57,7 +57,7 @@ GENERATE_MODES = {
   'Image': 'Image',
 }
 
-
+// http://kickjava.com/src/org/eclipse/swt/graphics/RGB.java.htm
 function HSBtoRGB(hue, saturation, brightness) {
   let r, g, b;
   saturation = saturation / 100;
