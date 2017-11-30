@@ -1,5 +1,3 @@
-console.error("'H(R(a-A)) S(R(a-A)) B(R(a-A))' isn't using HSB values");
-
 GENERATE_MODES = {
   'HSB: H(R) S(80) B(80)': () => HSBtoRGB(int(random(360)), 80, 80),
   'HSB: H(R) S(100) B(100)': () => HSBtoRGB(int(random(360)), 100, 100),
@@ -7,27 +5,27 @@ GENERATE_MODES = {
   'RGB: Random(0-255)': () => [random(0, 255), random(0, 255), random(0, 255), 255],
   'H(R(a-A)) S(R(a-A)) B(R(a-A))': function() {
     // 
-    var r, g, b;
+    let h, s, b;
 
-    if (config.minA == config.maxA) {
-      r = config.minA;
+    if (config.minA >= config.maxA) {
+      h = config.minA;
     } else {
-      r = int(random(config.minA, config.maxA));
+      h = int(random(config.minA, config.maxA));
     }
 
-    if (config.minB == config.maxB) {
-      g = config.minB;
+    if (config.minB >= config.maxB) {
+      s = config.minB;
     } else {
-      g = int(random(config.minB, config.maxB));
+      s = int(random(config.minB, config.maxB));
     }
 
-    if (config.minC == config.maxC) {
+    if (config.minC >= config.maxC) {
       b = config.minC;
     } else {
       b = int(random(config.minC, config.maxC));
     }
 
-    return [r, g, b, 255];
+    return HSBtoRGB(h, s, b);
   },
   'R(R(a-A)) G(R(a-A)) B(R(a-A))': function() {
     var r, g, b;
