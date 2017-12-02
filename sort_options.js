@@ -5,11 +5,11 @@
 // 
 SORT_MODES = {
   'Hue': { 'max': 360, 'func': (c) => getHue(c) },
-  'Saturation': (c) => getSaturation(c),
-  'Brightness': (c) => getBrightness(c),
-  'Lightness': (c) => getLightness(c),
-  'Luminance': (c) => getLuminance(c),
-  'Chroma': (c) => getChroma(c),
+  'Saturation': { 'max': 100, 'func': (c) => getSaturation(c) },
+  'Brightness': { 'max': 255, 'func': (c) => getBrightness(c) },
+  'Lightness': { 'max': 255, 'func': (c) => getLightness(c) },
+  'Luminance': { 'max': 255, 'func': (c) => getLuminance(c) },
+  'Chroma': { 'max': 255, 'func': (c) => getChroma(c) },
   'Absolute': { 'max': 255*3, 'func': (c) => c[0] + c[1] + c[2] },
   'Red': { 'max': 255, 'func': (c) => c[0] },
   'Green': { 'max': 255, 'func': (c) => c[1] },
@@ -17,7 +17,7 @@ SORT_MODES = {
   'Cyan': { 'max': 510, 'func': (c) => c[1] + c[2] },
   'Yellow': { 'max': 510, 'func': (c) => c[0] + c[1] },
   'Magenta': { 'max': 510, 'func': (c) => c[0] + c[2] },
-  'Hue + Luminance': (c) => getHue(c) + getLuminance(c),
+  'Hue + Luminance': { 'max': 360 + 255, 'func': (c) => getHue(c) + getLuminance(c) },
   'Hue ÷ Saturation': (c) => getHue(c) + getSaturation(c),
   'Hue x Saturation': (c) => getHue(c) * getSaturation(c),
   'Hue + Sat + Bri': (c) => getHue(c) + getSaturation(c) + getBrightness(c),
@@ -83,7 +83,7 @@ function getSaturation(rgba) {
     sat = chroma / val;
   }
 
-  return sat;
+  return int(sat * 100);
 };
 
 function getBrightness(rgba) {
@@ -93,7 +93,7 @@ function getBrightness(rgba) {
 
   var val = Math.max(red, green, blue);
 
-  return val;
+  return int(val);
 };
 
 function getLightness(rgba) {
@@ -105,11 +105,11 @@ function getLightness(rgba) {
   var min = Math.min(red, green, blue);
   var li = (val + min) / 2;
 
-  return li;
+  return int(li);
 }
 
 function getLuminance(c){
-  return 0.299*c[0] + 0.587*c[1] + 0.114*c[2];
+  return int(0.299*c[0] + 0.587*c[1] + 0.114*c[2]);
 }
 
 function getChroma(c){
@@ -120,5 +120,5 @@ function getChroma(c){
   var val = Math.max(red, green, blue);
   var chroma = val - Math.min(red, green, blue);
 
-  return chroma;
+  return int(chroma);
 }
