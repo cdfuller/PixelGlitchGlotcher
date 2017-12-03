@@ -26,18 +26,15 @@ function setup() {
 
 function draw() {
   if (keyIsDown(88)) { // 'x'
-    console.log('xxx');
     sortColumn(mouseX);
   }
 
   if (keyIsDown(89)) { // 'y'
-    console.log('yyy');
     sortRow(mouseY);
   }
 }
 
 function keyPressed() {
-  console.log(key);
   if (key == "T") {
     config.sortReverse = !config.sortReverse;
     console.log("Sort direction:", config.sortReverse);
