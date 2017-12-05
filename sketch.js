@@ -139,6 +139,7 @@ function sortAllColumns() {
   secondary_sort_mode = config.secondarySort;
   loadPixels();
 
+  console.log("=".repeat(40));
   console.log("Sorting ", width, " columns");
   console.time("Sort all columns");
 
@@ -161,6 +162,7 @@ function sortAllRows() {
   secondary_sort_mode = config.secondarySort;
   loadPixels();
 
+  console.log("=".repeat(40));
   console.log("Sorting ", height, " rows");
   console.time("Sort all rows");
 
