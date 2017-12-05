@@ -140,7 +140,7 @@ function sortAllColumns() {
   loadPixels();
 
   console.log("Sorting ", width, " columns");
-  t0 = performance.now();
+  console.time("Sort all columns");
 
   for (var x = 0; x < width; x+=1) {
     var col = sortedColumn(x);
@@ -148,8 +148,7 @@ function sortAllColumns() {
   }
   updatePixels();
   
-  t1 = performance.now();
-  console.log("Sorted All Columns", (t1 - t0));
+  console.timeEnd("Sort all columns");
   console.log("Comparisons", comparisons);
   console.log('Secondary', secondary);
   
@@ -163,17 +162,16 @@ function sortAllRows() {
   loadPixels();
 
   console.log("Sorting ", height, " rows");
-  t0 = performance.now();
+  console.time("Sort all rows");
 
   for (var y = 0; y < height; y++) {
     var row = sortedRow(y);
     setRow(y, row);
   }
-
-  updatePixels();
   
-  t1 = performance.now();
-  console.log("Sorted All Rows", (t1 - t0));
+  updatePixels();
+
+  console.timeEnd("Sort all rows");
   console.log("Comparisons", comparisons);
 
   comparisons = 0;
