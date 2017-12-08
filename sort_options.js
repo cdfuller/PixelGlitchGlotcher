@@ -70,7 +70,9 @@ SORT_MODES = {
   },
   'Grey Shades(8)': function(c) {
     return int((c[0] + c[1] + c[2]) / 16);
-  }
+  },
+  'Hash V1': (c) => getHashV1(c),
+  'Hash V2': (c) => getHashV2(c),
 }
 
 
@@ -168,4 +170,31 @@ function getChroma(c){
   var chroma = val - Math.min(red, green, blue);
 
   return chroma;
+}
+
+function getHashV1(c) {
+  let s = c[0].toString() + c[1].toString() + c[2].toString();
+  let hash = 0;
+
+  for (let i = 0; i < s.length; i++) {
+    let c = s.charCodeAt(i);
+    hash = ((hash<<5)-hash)+c;
+    hash = hash & hash;
+  }
+  return hash;
+}
+
+function getHashV2(c) {
+  let str = c[0].toString() + c[1].toString() + c[2].toString();
+  var hash = 5381,
+      i    = str.length;
+
+  while(i) {
+    hash = (hash * 33) ^ str.charCodeAt(--i);
+  }
+
+  /* JavaScript does bitwise operations (like XOR, above) on 32-bit signed
+   * integers. Since we want the results to be always positive, convert the
+   * signed int to an unsigned by doing an unsigned bitshift. */
+  return hash >>> 0;
 }
