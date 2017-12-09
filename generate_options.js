@@ -3,8 +3,10 @@ GENERATE_MODES = {
   'HSB: H(R) S(100) B(100)': () => HSBtoRGB(int(random(360)), 100, 100),
   'RGB: Rand(100-255)': () => [random(100, 255), random(100, 255), random(100, 255), 255],
   'RGB: Random(0-255)': () => [random(0, 255), random(0, 255), random(0, 255), 255],
-  'H(R(a-A)) S(R(a-A)) B(R(a-A))': function() {
-    let h, s, b;
+  'H(R(a-A)) S(R(a-A)) B(R(a-A))': function generateHueRange() {
+    let h;
+    let s;
+    let b;
 
     if (config.minA >= config.maxA) {
       h = config.minA;
@@ -26,9 +28,11 @@ GENERATE_MODES = {
 
     return HSBtoRGB(h, s, b);
   },
-  'R(R(a-A)) G(R(a-A)) B(R(a-A))': function() {
-    var r, g, b;
-    
+  'R(R(a-A)) G(R(a-A)) B(R(a-A))': function generateRGBRange() {
+    let r;
+    let g;
+    let b;
+
     if (config.minA == config.maxA) {
       r = config.minA;
     } else {
@@ -49,33 +53,36 @@ GENERATE_MODES = {
 
     return [r, g, b, 255];
   },
-  "Red: R(R) G(0) B(0)": () => [random(0, 255), 0, 0, 255],
-  "Green: R(0) G(R) B(0)": () => [0, random(0, 255), 0, 255],
-  "Blue: R(0) B(0) G(R)": () => [0, 0, random(0, 255), 255],
+  'Red: R(R) G(0) B(0)': () => [random(0, 255), 0, 0, 255],
+  'Green: R(0) G(R) B(0)': () => [0, random(0, 255), 0, 255],
+  'Blue: R(0) B(0) G(R)': () => [0, 0, random(0, 255), 255],
   'RedGreen: R(R) G(R) B(0)': () => [random(0, 255), random(0, 255), 0, 255],
   'RedBlue: R(R) G(0) B(R)': () => [random(0, 255), 0, random(0, 255), 255],
   'BlueGreen: R(0) G(R) B(R)': () => [0, random(0, 255), random(0, 255), 255],
-  'Image': 'Image',
-}
+  Image: 'Image',
+};
 
 // http://kickjava.com/src/org/eclipse/swt/graphics/RGB.java.htm
-function HSBtoRGB(hue, saturation, brightness) {
-  let r, g, b;
-  saturation = saturation / 100;
-  brightness = brightness / 100;
+function HSBtoRGB(_hue, _saturation, _brightness) {
+  let r;
+  let g;
+  let b;
+  let hue = _hue;
+  const saturation = _saturation / 100;
+  const brightness = _brightness / 100;
 
   if (saturation == 0) {
     r = g = b = brightness;
   } else {
-    if ( hue == 360) {
+    if (hue == 360) {
       hue = 0;
     }
-    hue = hue / 60;
-    let i = int(hue);
-    let f = hue - i;
-    let p = brightness * (1 - saturation);
-    let q = brightness * (1 - saturation * f);
-    let t = brightness * (1 - saturation * (1 - f));
+    hue /= 60;
+    const i = int(hue);
+    const f = hue - i;
+    const p = brightness * (1 - saturation);
+    const q = brightness * (1 - saturation * f);
+    const t = brightness * (1 - saturation * (1 - f));
 
     switch (i) {
       case 0:
