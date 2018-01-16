@@ -57,7 +57,7 @@ function setPixelColor(x, y, c) {
   for (let i = 0; i < d; i += 1) {
     for (let j = 0; j < d; j += 1) {
       const idx = 4 * (((y * d) + j) * width * d + (x * d + i));
-      pixels[idx] = c[0];
+      pixels[idx+0] = c[0];
       pixels[idx+1] = c[1];
       pixels[idx+2] = c[2];
       pixels[idx+3] = c[3];
