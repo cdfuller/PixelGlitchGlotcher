@@ -5,12 +5,12 @@
 //
 
 const SORT_MODES = {
-  'Hue': { 'max': 360, 'func': (c) => getHue(c) },
-  'Saturation': { 'max': 100, 'func': (c) => getSaturation(c) },
-  'Brightness': { 'max': 255, 'func': (c) => getBrightness(c) },
-  'Lightness': { 'max': 255, 'func': (c) => getLightness(c) },
-  'Luminance': { 'max': 255, 'func': (c) => getLuminance(c) },
-  'Chroma': { 'max': 255, 'func': (c) => getChroma(c) },
+  'Hue': { 'max': 360, 'func': getHue },
+  'Saturation': { 'max': 100, 'func': getSaturation },
+  'Brightness': { 'max': 255, 'func': getBrightness },
+  'Lightness': { 'max': 255, 'func': getLightness },
+  'Luminance': { 'max': 255, 'func': getLuminance },
+  'Chroma': { 'max': 255, 'func': getChroma },
   'Absolute': { 'max': 255 * 3, 'func': (c) => c[0] + c[1] + c[2] },
   'Red': { 'max': 255, 'func': (c) => c[0] },
   'Green': { 'max': 255, 'func': (c) => c[1] },
@@ -80,7 +80,7 @@ function getSaturation(rgba) {
   let val = Math.max(red, green, blue);
   let chroma = val - Math.min(red, green, blue);
 
-   sat;
+  let sat;
   if (chroma === 0) {  // Return early if grayscale.
     sat = 0;
   }

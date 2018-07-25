@@ -125,7 +125,7 @@ function getRow(y) {
 
 function sortSet(pxl_array, primary_sort_mode, secondary_sort_mode) {
   let buckets = [];
-  let l = primary_sort_mode['max'] - 1;
+  let l = primary_sort_mode['max'];
   let sort_func = primary_sort_mode['func'];
 
   // Create an Array of Arrays for each bucket
