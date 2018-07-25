@@ -1,8 +1,8 @@
 console.error('Sort reverse not implemented in counting sort');
 console.error('Offset not implemented when sorting sets')
 
-// const filename = 'input/karly.jpg';
-const filename = 'input/starrynight.jpg';
+const filename = 'input/karly.jpg';
+// const filename = 'input/starrynight.jpg';
 // const filename = 'input/scrambled-rgb.png';
 // const filename = 'input/04_woooo.png';
 let gui;
@@ -125,7 +125,7 @@ function getRow(y) {
 
 function sortSet(pxl_array, primary_sort_mode, secondary_sort_mode) {
   let buckets = [];
-  let l = primary_sort_mode['max'];
+  let l = primary_sort_mode['max'] - 1;
   let sort_func = primary_sort_mode['func'];
 
   // Create an Array of Arrays for each bucket

@@ -26,8 +26,8 @@ const SORT_MODES = {
   'Red x Green': { 'max': 255 * 255, 'func': (c) => (c[0] + 1) / (c[1] + 1) },
   'Red x Blue': { 'max': 255 * 255, 'func': (c) => (c[0] + 1) / (c[2] + 1) },
   'Green x Blue': { 'max': 255 * 255, 'func': (c) => (c[1] + 1) / (c[2] + 1) },
-  'Black/White(2)': { 'max': 2, 'func': (c) => int((c[0] + c[1] + c[2]) / 128) },
-  'Grey Shades(8)': { 'max': 47, 'func': (c) => int((c[0] + c[1] + c[2]) / 16) },
+  'Black/White(2)': { 'max': 2, 'func': (c) => int((c[0] + c[1] + c[2]) / 128 / 3) },
+  'Grey Shades(8)': { 'max': 8, 'func': (c) => int((c[0] + c[1] + c[2]) / 32 / 3) },
   // Need to figure out max value before enabling.
   // 'Hash V1': { 'max': null, 'func': (c) => getHashV1(c) },
   // 'Hash V2': { 'max': null, 'func': (c) => getHashV2(c) },
