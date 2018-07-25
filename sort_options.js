@@ -18,14 +18,14 @@ SORT_MODES = {
   'Yellow': { 'max': 510, 'func': (c) => c[0] + c[1] },
   'Magenta': { 'max': 510, 'func': (c) => c[0] + c[2] },
   'Hue + Luminance': { 'max': 360 + 255, 'func': (c) => getHue(c) + getLuminance(c) },
-  'Hue ÷ Saturation': (c) => getHue(c) + getSaturation(c),
-  'Hue x Saturation': (c) => getHue(c) * getSaturation(c),
-  'Hue + Sat + Bri': (c) => getHue(c) + getSaturation(c) + getBrightness(c),
-  'Experimental': (c) => getHue(c) + (getSaturation(c) * getBrightness(c)),
-  'Red x Blue': (c) => (c[0] + 1) / (c[2] + 1),
+  'Hue ÷ Saturation': { 'max': 360 / 100, 'func': (c) => getHue(c) + getSaturation(c) },
+  'Hue x Saturation': { 'max': 360 * 100, 'func': (c) => getHue(c) * getSaturation(c) },
+  'Hue + Sat + Bri': { 'max': 360 + 100 + 100, 'func': (c) => getHue(c) + getSaturation(c) + getBrightness(c) },
+  'Experimental': { 'max': 360 + (100*100), 'func': (c) => getHue(c) + (getSaturation(c) * getBrightness(c)) },
+  'Red x Blue': { 'max': 255 * 255, 'func': (c) => (c[0] + 1) / (c[2] + 1) },
   'Black/White(2)': { 'max': 2, 'func': (c) => int(getBrightness(c) / 128) },
   'Shades(6)': { 'max': 6, 'func': (c) => int((c[0] + c[1] + c[2]) / 128) },
-  'Shades(48)': {max: 47, 'func': (c) => int((c[0] + c[1] + c[2]) / 16) },
+  'Shades(48)': { 'max': 47, 'func': (c) => int((c[0] + c[1] + c[2]) / 16) },
 }
 
 

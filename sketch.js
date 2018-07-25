@@ -1,4 +1,4 @@
-console.error('secondary_sort not working with new sorting algorithm')
+console.error('Sort reverse not implemented in counting sort')
 
 // const filename = "input/karly.jpg";
 const filename = "input/starrynight.jpg"
@@ -84,8 +84,8 @@ function setColumn(x, col) {
 }
 
 function getColumn(x) {
-  var col = [];
-  for (var i = 0; i < height; i++) {
+  let col = [];
+  for (let i = 0; i < height; i++) {
     col.push(getPixelColor(x, i));
   }
   return col;
@@ -93,19 +93,20 @@ function getColumn(x) {
 
 function sortColumn(x) {
   loadPixels();
-  sort_mode = config.sortMode;
-  secondary_sort_mode = config.secondarySort;
-  var col = getColumn(x);
-  sortSet(col)
+  sort_mode = SORT_MODES[config.sortMode];
+  secondary_sort_mode = SORT_MODES[config.secondarySort];
+  let col = getColumn(x);
+  sortSet(col, sort_mode, secondary_sort_mode);
   setColumn(x, col);
   updatePixels();
 }
 
 function sortRow(y) {
   loadPixels();
-  sort_mode = config.sortMode;
-  secondary_sort_mode = config.secondarySort;
-  var row = sortedRow(y);
+  sort_mode = SORT_MODES[config.sortMode];
+  secondary_sort_mode = SORT_MODES[config.secondarySort];
+  let row = getRow(y);
+  sortSet(row, sort_mode, secondary_sort_mode);
   setRow(y, row);
   updatePixels();
 }
@@ -125,115 +126,87 @@ function getRow(y) {
 }
 
 
-/////////////////////////////////////////////////////////////
-// NEW ALGORITHM
-/////////////////////////////////////////////////////////////
-function sortSet(pxl_array, max, key) {
+function sortSet(pxl_array, primary_sort_mode, secondary_sort_mode) {
+  let buckets = [];
+  let l = primary_sort_mode['max'];
+  let sort_func = primary_sort_mode['func'];
 
-  let count = [];
-  let i = max;
-  while (i >= 0) {
-    count[i--] = new Array();
+  // Create an Array of Arrays for each bucket
+  while (l >= 0) {
+    buckets[l--] = new Array();
   }
 
+  // Put every pixel in the correct bucket
   for (let i = 0; i < pxl_array.length; i++) {
-    let k = key(pxl_array[i]);
-    count[k].push(pxl_array[i]);
+    let k = sort_func(pxl_array[i]);
+    buckets[k].push(pxl_array[i]);
   }
 
-  for (let i = 0, j = 0; i <= max; i++) {
-    while (count[i].length > 0) {
-      let e = count[i].pop();
+  // Sort secondary
+  if (secondary_sort_mode) {
+    let secondary_sort_func = secondary_sort_mode['func']
+    for (let i = 0; i < buckets.length; i++) {
+      buckets[i].sort((a, b) => secondary_sort_func(a) - secondary_sort_func(b) )
+    }
+  }
+
+  // Flatten buckets and update pixels
+  for (let i = 0, j = 0; i < buckets.length; i++) {
+    while (buckets[i].length > 0) {
+      let e = buckets[i].pop();
       pxl_array[j++] = e;
     }
   }
 }
 
-
-
-/////////////////////////////////////////////////////////////
-// OLD ALGORITHM
-/////////////////////////////////////////////////////////////
-function sortedColumn(x) {
-  if (config.sortOffset == 0) {
-    return getColumn(x).sort(compareColors);
-  } else {
-    return offsetArray(config.sortOffset, getColumn(x).sort(compareColors));
-  }
-}
-
-/////////////////////////////////////////////////////////////
-
-
-function sortedRow(y) {
-  if (config.sortOffset == 0) {
-    return getRow(y).sort(compareColors);
-  } else {
-    return offsetArray(config.sortOffset, getRow(y).sort(compareColors));
-  }
-}
-
 function sortAllColumns() {
-  sort_mode = config.sortMode;
-  secondary_sort_mode = config.secondarySort;
   loadPixels();
 
   console.log("Sorting ", width, " columns");
   t0 = performance.now();
 
-  if ('max' in SORT_MODES[sort_mode]) {
-    console.log(sort_mode);
-    sort_mode = SORT_MODES[config.sortMode];
-    for (var x = 0; x < width; x+=1) {
-        var col = getColumn(x);
-        sortSet(col, sort_mode['max'], sort_mode['func']);
-        setColumn(x, col);
-      }
-  } else {
-    for (var x = 0; x < width; x+=1) {
-      var col = sortedColumn(x);
+  sort_mode = SORT_MODES[config.sortMode];
+  secondary_sort_mode = SORT_MODES[config.secondarySort];
+
+  for (var x = 0; x < width; x+=1) {
+      var col = getColumn(x);
+      sortSet(col, sort_mode, secondary_sort_mode);
       setColumn(x, col);
-    }
   }
-  updatePixels();
   
   t1 = performance.now();
   console.log("Sorted All Columns", (t1 - t0));
   console.log("Comparisons", comparisons);
   console.log('Secondary', secondary);
-  
+
+  updatePixels();
   secondary = 0;
   comparisons = 0;
 }
 
+
 function sortAllRows() {
-  sort_mode = config.sortMode;
-  secondary_sort_mode = config.secondarySort;
   loadPixels();
 
   console.log("Sorting ", height, " rows");
   t0 = performance.now();
 
-  if ('max' in SORT_MODES[sort_mode]) {
-    console.log(sort_mode);
-    sort_mode = SORT_MODES[config.sortMode];
-    for (var y = 0; y < height; y+=1) {
-        var row = getRow(y);
-        sortSet(row, sort_mode['max'], sort_mode['func']);
-        setRow(y, row);
-      }
-  } else {
-    for (var y = 0; y < height; y+=1) {
-      var row = sortedRow(y);
-      setRow(y, row);
-    }
+  sort_mode = SORT_MODES[config.sortMode];
+  secondary_sort_mode = SORT_MODES[config.secondarySort];
+
+  for (var y = 0; y < height; y++) {
+    var row = getRow(y);
+    sortSet(row, sort_mode, secondary_sort_mode);
+    setRow(y, row);
   }
-  updatePixels();
-  
+
   t1 = performance.now();
   console.log("Sorted All Rows", (t1 - t0));
   console.log("Comparisons", comparisons);
+  console.log('Secondary', secondary);
 
+  updatePixels();
+  secondary = 0;
   comparisons = 0;
 }
 
@@ -259,39 +232,6 @@ function shiftImageHorizontal() {
     setRow(y ,row);
   }
   updatePixels();
-}
-
-function compareColors(a, b) {
-  comparisons++;
-
-  if (config.sortReverse == true) {
-    sortDirection = -1;
-  } else {
-    sortDirection = 1;
-  }
-
-  var left = SORT_MODES[sort_mode](a);
-  var right = SORT_MODES[sort_mode](b);
-
-  if ( left < right ) {
-    return -1 * sortDirection;
-  } else if ( left > right ) {
-    return 1 * sortDirection;
-  } else if (secondary_sort_mode !== 'None') {
-    secondary++;
-    var l = SORT_MODES[secondary_sort_mode](a);
-    var r = SORT_MODES[secondary_sort_mode](b);
-    if ( l < r ) {
-      return -1 * sortDirection;
-    } else if ( l > r ) {
-      return 1 * sortDirection;
-    } else {
-      return 0;
-    }
-  } else {
-    return 0;
-  }
-
 }
 
 function saveImage() {
