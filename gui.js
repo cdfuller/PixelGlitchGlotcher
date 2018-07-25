@@ -1,6 +1,6 @@
-var config = {
+let config = {
     canvasStart: 'Image',
-    sortMode: "Hue",
+    sortMode: 'Hue',
     secondarySort: 'None',
     sortReverse: false,
     reset: renderCanvas,
@@ -18,9 +18,9 @@ var config = {
     "sortOffset": 0,
 }
 
-function createGUI(){
-  var sort_modes = Object.keys(SORT_MODES);
-  var secondary_sort_modes = Object.keys(SORT_MODES);
+function createGUI() {
+  let sort_modes = Object.keys(SORT_MODES);
+  let secondary_sort_modes = Object.keys(SORT_MODES);
   secondary_sort_modes.unshift('None');
 
   gui = new dat.gui.GUI();
@@ -34,7 +34,7 @@ function createGUI(){
   gui.add(config, 'Shift Vertical');
   gui.add(config, 'sortReverse').listen();
 
-  var genFolder= gui.addFolder("Canvas Generation");
+  let genFolder= gui.addFolder("Canvas Generation");
   genFolder.add(config, 'canvasStart', Object.keys(GENERATE_MODES));
   genFolder.add(config, 'minA').min(0).max(359).step(1);
   genFolder.add(config, 'maxA').min(0).max(360).step(1);

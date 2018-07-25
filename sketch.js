@@ -1,3 +1,6 @@
+console.error('Sort reverse not implemented in counting sort');
+console.error('Offset not implemented when sorting sets')
+
 // const filename = 'input/karly.jpg';
 const filename = 'input/starrynight.jpg';
 // const filename = 'input/scrambled-rgb.png';
@@ -26,11 +29,11 @@ function setup() {
 
 function draw() {
   if (keyIsDown(88)) { // 'x'
-    sortColumn(mouseX);
+    sortColumn(int(mouseX));
   }
 
   if (keyIsDown(89)) { // 'y'
-    sortRow(mouseY);
+    sortRow(int(mouseY));
   }
 }
 
@@ -88,18 +91,20 @@ function getColumn(x) {
 
 function sortColumn(x) {
   loadPixels();
-  sortMode = config.sortMode;
-  secondarySortMode = config.secondarySort;
-  const col = sortedColumn(x);
+  let sort_mode = SORT_MODES[config.sortMode];
+  let secondary_sort_mode = SORT_MODES[config.secondarySort];
+  let col = getColumn(x);
+  sortSet(col, sort_mode, secondary_sort_mode);
   setColumn(x, col);
   updatePixels();
 }
 
 function sortRow(y) {
   loadPixels();
-  sortMode = config.sortMode;
-  secondarySortMode = config.secondarySort;
-  const row = sortedRow(y);
+  let sort_mode = SORT_MODES[config.sortMode];
+  let secondary_sort_mode = SORT_MODES[config.secondarySort];
+  let row = getRow(y);
+  sortSet(row, sort_mode, secondary_sort_mode);
   setRow(y, row);
   updatePixels();
 }
@@ -118,63 +123,85 @@ function getRow(y) {
   return row;
 }
 
-function sortedColumn(x) {
-  if (config.sortOffset === 0) {
-    return getColumn(x).sort(compareColors);
-  }
-  return offsetArray(config.sortOffset, getColumn(x).sort(compareColors));
-}
+function sortSet(pxl_array, primary_sort_mode, secondary_sort_mode) {
+  let buckets = [];
+  let l = primary_sort_mode['max'];
+  let sort_func = primary_sort_mode['func'];
 
-function sortedRow(y) {
-  if (config.sortOffset === 0) {
-    return getRow(y).sort(compareColors);
+  // Create an Array of Arrays for each bucket
+  while (l >= 0) {
+    buckets[l--] = new Array();
   }
-  return offsetArray(config.sortOffset, getRow(y).sort(compareColors));
+
+  // Put every pixel in the correct bucket
+  for (let i = 0; i < pxl_array.length; i++) {
+    let k = sort_func(pxl_array[i]);
+    buckets[k].push(pxl_array[i]);
+  }
+
+  // Sort secondary
+  if (secondary_sort_mode) {
+    let secondary_sort_func = secondary_sort_mode['func']
+    for (let i = 0; i < buckets.length; i++) {
+      buckets[i].sort((a, b) => secondary_sort_func(a) - secondary_sort_func(b))
+    }
+  }
+
+  // Flatten buckets and update pixels
+  for (let i = 0, j = 0; i < buckets.length; i++) {
+    while (buckets[i].length > 0) {
+      let e = buckets[i].pop();
+      pxl_array[j++] = e;
+    }
+  }
 }
 
 function sortAllColumns() {
-  sortMode = config.sortMode;
-  secondarySortMode = config.secondarySort;
   loadPixels();
 
-  console.log('='.repeat(40));
-  console.log('Sorting ', width, ' columns');
+  console.log("Sorting ", width, " columns");
   console.time('Sort all columns');
 
-  for (let x = 0; x < width; x += 1) {
-    const col = sortedColumn(x);
+  sort_mode = SORT_MODES[config.sortMode];
+  secondary_sort_mode = SORT_MODES[config.secondarySort];
+
+  for (var x = 0; x < width; x += 1) {
+    var col = getColumn(x);
+    sortSet(col, sort_mode, secondary_sort_mode);
     setColumn(x, col);
   }
-  updatePixels();
 
   console.timeEnd('Sort all columns');
-  console.log('Comparisons', comparisons);
+  console.log("Comparisons", comparisons);
   console.log('Secondary', secondary);
 
   secondary = 0;
   comparisons = 0;
+  updatePixels();
 }
 
 function sortAllRows() {
-  sortMode = config.sortMode;
-  secondarySortMode = config.secondarySort;
   loadPixels();
 
-  console.log('='.repeat(40));
-  console.log('Sorting ', height, ' rows');
+  console.log("Sorting ", height, " rows");
   console.time('Sort all rows');
 
-  for (let y = 0; y < height; y += 1) {
-    const row = sortedRow(y);
+  sort_mode = SORT_MODES[config.sortMode];
+  secondary_sort_mode = SORT_MODES[config.secondarySort];
+
+  for (var y = 0; y < height; y++) {
+    var row = getRow(y);
+    sortSet(row, sort_mode, secondary_sort_mode);
     setRow(y, row);
   }
 
-  updatePixels();
-
   console.timeEnd('Sort all rows');
-  console.log('Comparisons', comparisons);
+  console.log("Comparisons", comparisons);
+  console.log('Secondary', secondary);
 
+  secondary = 0;
   comparisons = 0;
+  updatePixels();
 }
 
 function shiftImageVertical() {
@@ -199,36 +226,6 @@ function shiftImageHorizontal() {
     setRow(y, row);
   }
   updatePixels();
-}
-
-function compareColors(a, b) {
-  comparisons += 1;
-
-  let sortDirection = 1;
-  if (config.sortReverse === true) {
-    sortDirection = -1;
-  }
-
-  const left = SORT_MODES[sortMode](a);
-  const right = SORT_MODES[sortMode](b);
-
-  if (left < right) {
-    return -1 * sortDirection;
-  } else if ( left > right ) {
-    return 1 * sortDirection;
-  } else if (secondarySortMode !== 'None') {
-    secondary += 1;
-    const l = SORT_MODES[secondarySortMode](a);
-    const r = SORT_MODES[secondarySortMode](b);
-
-    if (l < r) {
-      return -1 * sortDirection;
-    } else if (l > r) {
-      return 1 * sortDirection;
-    }
-    return 0;
-  }
-  return 0;
 }
 
 function saveImage() {
