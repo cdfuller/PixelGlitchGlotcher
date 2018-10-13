@@ -28,12 +28,10 @@ function setup() {
 
 function draw() {
   if (keyIsDown(88)) { // 'x'
-    console.log('xxx', mouseX);
     sortColumn(int(mouseX));
   }
 
   if (keyIsDown(89)) { // 'y'
-    console.log('yyy', mouseY);
     sortRow(int(mouseY));
   }
 }
@@ -163,7 +161,7 @@ function sortAllColumns() {
   loadPixels();
 
   console.log("Sorting ", width, " columns");
-  t0 = performance.now();
+  console.time('Sort all columns');
 
   sort_mode = SORT_MODES[config.sortMode];
   secondary_sort_mode = SORT_MODES[config.secondarySort];
@@ -174,8 +172,7 @@ function sortAllColumns() {
       setColumn(x, col);
   }
   
-  t1 = performance.now();
-  console.log("Sorted All Columns", (t1 - t0));
+  console.timeEnd('Sort all columns');
   console.log("Comparisons", comparisons);
   console.log('Secondary', secondary);
 
@@ -189,7 +186,7 @@ function sortAllRows() {
   loadPixels();
 
   console.log("Sorting ", height, " rows");
-  t0 = performance.now();
+  console.time('Sort all rows');
 
   sort_mode = SORT_MODES[config.sortMode];
   secondary_sort_mode = SORT_MODES[config.secondarySort];
@@ -200,8 +197,7 @@ function sortAllRows() {
     setRow(y, row);
   }
 
-  t1 = performance.now();
-  console.log("Sorted All Rows", (t1 - t0));
+  console.timeEnd('Sort all rows');
   console.log("Comparisons", comparisons);
   console.log('Secondary', secondary);
 
