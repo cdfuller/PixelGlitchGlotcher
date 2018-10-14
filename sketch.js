@@ -24,6 +24,7 @@ function preload() {
 
 function setup() {
   renderCanvas();
+  loadPixels();
   console.log('Setup finished.');
 }
 
@@ -35,6 +36,7 @@ function draw() {
   if (keyIsDown(89)) { // 'y'
     sortRow(int(mouseY));
   }
+  updatePixels();
 }
 
 function keyPressed() {
@@ -90,23 +92,23 @@ function getColumn(x) {
 }
 
 function sortColumn(x) {
-  loadPixels();
+  // loadPixels();
   let sort_mode = SORT_MODES[config.sortMode];
   let secondary_sort_mode = SORT_MODES[config.secondarySort];
   let col = getColumn(x);
   sortSet(col, sort_mode, secondary_sort_mode);
   setColumn(x, col);
-  updatePixels();
+  // updatePixels();
 }
 
 function sortRow(y) {
-  loadPixels();
+  // loadPixels();
   let sort_mode = SORT_MODES[config.sortMode];
   let secondary_sort_mode = SORT_MODES[config.secondarySort];
   let row = getRow(y);
   sortSet(row, sort_mode, secondary_sort_mode);
   setRow(y, row);
-  updatePixels();
+  // updatePixels();
 }
 
 function setRow(y, row) {
@@ -157,7 +159,7 @@ function sortSet(pxl_array, primary_sort_mode, secondary_sort_mode) {
 }
 
 function sortAllColumns() {
-  loadPixels();
+  // loadPixels();
 
   console.log("Sorting ", width, " columns");
   console.time('Sort all columns');
@@ -177,11 +179,11 @@ function sortAllColumns() {
 
   secondary = 0;
   comparisons = 0;
-  updatePixels();
+  // updatePixels();
 }
 
 function sortAllRows() {
-  loadPixels();
+  // loadPixels();
 
   console.log("Sorting ", height, " rows");
   console.time('Sort all rows');
@@ -201,11 +203,11 @@ function sortAllRows() {
 
   secondary = 0;
   comparisons = 0;
-  updatePixels();
+  // updatePixels();
 }
 
 function shiftImageVertical() {
-  loadPixels();
+  // loadPixels();
   const offset = config.sortOffset;
 
   for (let x = 0; x < width; x += 1) {
@@ -213,11 +215,11 @@ function shiftImageVertical() {
     col = offsetArray(offset, col);
     setColumn(x, col);
   }
-  updatePixels();
+  // updatePixels();
 }
 
 function shiftImageHorizontal() {
-  loadPixels();
+  // loadPixels();
   const offset = config.sortOffset;
 
   for (let y = 0; y < height; y += 1) {
@@ -225,7 +227,7 @@ function shiftImageHorizontal() {
     row = offsetArray(offset, row);
     setRow(y, row);
   }
-  updatePixels();
+  // updatePixels();
 }
 
 function saveImage() {
@@ -241,7 +243,7 @@ function generateCanvas() {
       setPixelColor(x, y, c);
     }
   }
-  updatePixels();
+  // updatePixels();
   console.log('Canvas finished generating');
 }
 
@@ -250,13 +252,13 @@ function renderCanvas() {
     const canvas = createCanvas(img.width, img.height);
     canvas.parent('sketch-container');
     pixelDensity(1);
-    loadPixels();
+    // loadPixels();
     image(img, 0, 0);
   } else {
     const canvas = createCanvas(640, 640);
     canvas.parent('sketch-container');
     pixelDensity(1);
-    loadPixels();
+    // loadPixels();
     generateCanvas();
   }
   sketchPixelDensity = pixelDensity();
