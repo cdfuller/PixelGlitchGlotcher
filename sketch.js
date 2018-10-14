@@ -126,6 +126,11 @@ function getRow(y) {
 }
 
 function sortSet(pxl_array, primary_sort_mode, secondary_sort_mode) {
+  sortSetFunctional(pxl_array, primary_sort_mode, secondary_sort_mode);
+  // sortSetOriginal(pxl_array, primary_sort_mode, secondary_sort_mode);
+}
+
+function sortSetOriginal(pxl_array, primary_sort_mode, secondary_sort_mode) {
   let buckets = [];
   let l = primary_sort_mode['max'];
   let sort_func = primary_sort_mode['func'];
@@ -155,6 +160,55 @@ function sortSet(pxl_array, primary_sort_mode, secondary_sort_mode) {
       let e = buckets[i].pop();
       pxl_array[j++] = e;
     }
+  }
+}
+
+// sortSetFunctional
+function sortSetFunctional(pxl_array, primary_sort_mode, secondary_sort_mode) {
+  let l = primary_sort_mode['max'];
+  let sort_func = primary_sort_mode['func'];
+
+  let buckets = buildBuckets(l);
+  buckets = primarySort(pxl_array, sort_func, buckets);
+
+  if (secondary_sort_mode) {
+    buckets = secondarySort(buckets, secondary_sort_mode['func']);
+  }
+
+  return flatten(buckets, pxl_array);
+
+  function buildBuckets(length) {
+    let l = length;
+    let buckets = [];
+    while (l >= 0) {
+      buckets[l--] = new Array();
+    }
+    return buckets;
+  }
+
+  function primarySort(pxl_array, sort_func, buckets) {
+    for (let i = 0; i < pxl_array.length; i++) {
+      let k = sort_func(pxl_array[i]);
+      buckets[k].push(pxl_array[i]);
+    }
+    return buckets;
+  }
+
+  function secondarySort(buckets, sort_func) {
+    for (let i = 0; i < buckets.length; i++) {
+      buckets[i].sort((a, b) => sort_func(a) - sort_func(b));
+    }
+    return buckets
+  }
+
+  function flatten(buckets, pxl_array) {
+    for (let i = 0, j = 0; i < buckets.length; i++) {
+      while (buckets[i].length > 0) {
+        let e = buckets[i].pop();
+        pxl_array[j++] = e;
+      }
+    }
+    return pxl_array;
   }
 }
 
